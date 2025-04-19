@@ -10,10 +10,12 @@ import com.example.cardgame.datamanager.user.UserInfo
 import com.example.cardgame.datamanager.user.UserInfoDAO
 import com.example.cardgame.datamanager.achievement.Achievement
 import com.example.cardgame.datamanager.achievement.AchievementDAO
+import com.example.cardgame.datamanager.history.GameHistory
+import com.example.cardgame.datamanager.history.GameHistoryDAO
 
 @Database(
     entities = [
-        User::class, UserInfo::class,  Achievement::class
+        User::class, UserInfo::class,  Achievement::class, GameHistory::class
     ],
     version = 7
 )
@@ -21,6 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun userInfoDAO(): UserInfoDAO
     abstract fun achievementDAO(): AchievementDAO
+    abstract fun gameHistoryDAO(): GameHistoryDAO
 
     companion object {
         private const val DATABASE_NAME = "cardgame.db" // Corrected database name

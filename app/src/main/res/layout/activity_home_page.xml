@@ -11,7 +11,7 @@
         android:id="@+id/tvAppTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="35dp"
         android:text="ПАСТРА"
         android:textColor="@color/primary_text"
         android:textSize="28sp"
@@ -25,7 +25,7 @@
         android:id="@+id/pointsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/points_background"
         android:gravity="center_vertical"
@@ -138,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Play"
+                    android:text="Игра"
                     android:textColor="@color/primary_text"
                     android:textSize="16sp" />
             </LinearLayout>
