@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#006400">
+
+    <!-- Status bar padding -->
+    <View
+        android:id="@+id/statusBarPadding"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Team Scores - Moved lower to avoid status bar conflict -->
+    <LinearLayout
+        android:id="@+id/scoresLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/statusBarPadding">
+
+        <TextView
+            android:id="@+id/team1ScoreTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:text="Team 1: 0 points"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/team2ScoreTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:gravity="end"
+            android:text="Team 2: 0 points"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Status -->
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="Current player: You"
+        app:layout_constraintTop_toBottomOf="@id/scoresLayout"/>
+
+    <!-- Player 3 Position (Top/Partner) -->
+    <ImageView
+        android:id="@+id/player3CardView"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:src="@drawable/card_back"
+        android:rotation="180"
+        app:layout_constraintTop_toBottomOf="@id/statusTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Partner's card"/>
+
+    <!-- Player 2 Position (Left) -->
+    <ImageView
+        android:id="@+id/player2CardView"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:src="@drawable/card_back"
+        android:rotation="90"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tableCenterGuide"
+        app:layout_constraintBottom_toBottomOf="@id/tableCenterGuide"
+        android:layout_marginStart="16dp"
+        android:contentDescription="Left player's card"/>
+
+    <!-- Player 4 Position (Right) -->
+    <ImageView
+        android:id="@+id/player4CardView"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:src="@drawable/card_back"
+        android:rotation="-90"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tableCenterGuide"
+        app:layout_constraintBottom_toBottomOf="@id/tableCenterGuide"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="Right player's card"/>
+
+    <!-- Center guide for table alignment -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/tableCenterGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <!-- Table Cards Label -->
+    <TextView
+        android:id="@+id/tableCardsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Table Cards:"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/player3CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Table Cards RecyclerView -->
+
+    <!-- Game Log Section -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tableCardsRecyclerView"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        app:layout_constraintEnd_toStartOf="@id/player4CardView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/player2CardView"
+        app:layout_constraintTop_toBottomOf="@id/tableCardsLabel"
+        tools:listitem="@layout/card_item" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/gameLogSection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tableCardsRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nextButton"
+        app:layout_constraintBottom_toTopOf="@id/yourHandLabel"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="#00420A"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/logLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Game Log:"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"/>
+
+            <ScrollView
+                android:id="@+id/logScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/gameLogTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"/>
+            </ScrollView>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Turn"
+        android:backgroundTint="#008800"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/gameLogSection"
+        app:layout_constraintBottom_toBottomOf="@id/gameLogSection"
+        android:layout_marginEnd="16dp"/>
+
+    <!-- Player Hand (always at bottom) -->
+    <TextView
+        android:id="@+id/yourHandLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Hand:"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/playerHandContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="16dp"/>
+
+    <!-- Container for player hand to control width and centering -->
+    <HorizontalScrollView
+        android:id="@+id/playerHandContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="8dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/playerHandRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="140dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                tools:listitem="@layout/card_item"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Animation Container -->
+    <FrameLayout
+        android:id="@+id/playCardView"
+        android:layout_width="100dp"
+        android:layout_height="140dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/playedCardImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:contentDescription="Played card"/>
+    </FrameLayout>
+
+    <!-- Pastra Animation Text -->
+    <TextView
+        android:id="@+id/pastraText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PASTRA!"
+        android:textSize="36sp"
+        android:textColor="#FFD700"
+        android:textStyle="bold"
+        android:shadowColor="#000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

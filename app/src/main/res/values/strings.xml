@@ -1,0 +1,324 @@
+<resources>
+    <string name="app_name">CardGame</string>
+    <string name="title_activity_login">Вход</string>
+    <string name="prompt_email">Имейл</string>
+    <string name="prompt_password">Парола</string>
+    <string name="action_sign_in">Вход или регистрация</string>
+    <string name="action_sign_in_short">Вход</string>
+    <string name="welcome">Добре дошъл!</string>
+    <string name="invalid_username">Невалидно потребителско име</string>
+    <string name="invalid_password">Паролата трябва да е над 5 символа</string>
+    <string name="login_failed">Входът е неуспешен</string>
+    <string name="my_map_api_key">AIzaSyA5MuL3YX5vAtpCXnA5XrEYoffb2MyV-yc</string>
+    <string-array name="gender_options">
+        <item>Мъж</item>
+        <item>Жена</item>
+    </string-array>
+    <string name="home">Начало</string>
+
+    <!-- Post Screen Strings -->
+    <string name="posts_title">Публикации</string>
+    <string name="post_title_hint">Заглавие на публикацията</string>
+    <string name="post_content_hint">Напиши публикация…</string>
+    <string name="take_photo">Снимай</string>
+    <string name="post_button">Публикувай</string>
+    <string name="delete">Изтрий</string>
+
+    <!-- Friends Screen Strings -->
+    <string name="friends_title">Приятели</string>
+    <string name="add_button">Добави</string>
+    <string name="clear_button">Изчисти</string>
+    <string name="friend_name_placeholder">Име на приятел</string>
+
+    <!-- User List Strings -->
+    <string name="username_placeholder">Потребителско име</string>
+    <string name="role_format">Роля: %1$s</string>
+    <string name="role_user">потребител</string>
+    <string name="delete_user">Изтрий потребител</string>
+
+    <!-- Post List Item Strings -->
+    <string name="your_post_hint">Твоята публикация…</string>
+
+    <!-- Content Descriptions for Accessibility -->
+    <string name="image_preview_description">Преглед на изображение</string>
+    <string name="camera_icon_description">Бутон за камера</string>
+    <string name="friend_icon_description">Индикатор за приятел</string>
+    <string name="post_image_description">Изображение от публикация</string>
+
+    <!-- Workout Item Strings -->
+    <string name="workout_name">Име на тренировка</string>
+    <string name="workout_timer">Почивка: X сек</string>
+    <string name="workout_options">Опции</string>
+
+    <!-- Nutrition Item Strings -->
+    <string name="food_name">Въведи храна</string>
+    <string name="calories">Калории: %1$d</string>
+    <string name="serving_size">Порция: %1$s</string>
+    <string name="fat_content">Мазнини: %1$sg (Наситени: %2$sg)</string>
+    <string name="protein_content">Протеин: %1$sg</string>
+    <string name="carbs_content">Въглехидрати: %1$sg (Захар: %2$sg, Фибри: %3$sg)</string>
+    <string name="minerals_content">Натрий: %1$smg | Калий: %2$smg</string>
+    <string name="cholesterol_content">Холестерол: %1$smg</string>
+
+    <!-- Meal Item Strings -->
+    <string name="meal_title">Заглавие на хранене</string>
+    <string name="meal_category">Категория: %1$s</string>
+    <string name="meal_calories">Калории: %1$d (%2$d порции)</string>
+    <string name="meal_ingredients">Съставки: %1$s</string>
+
+    <!-- Location Item Strings -->
+    <string name="location_name_placeholder">Име на място</string>
+    <string name="location_address_placeholder">Адрес на място</string>
+    <string name="location_description_placeholder">Описание на място</string>
+
+    <!-- Leaderboard Item Strings -->
+    <string name="rank_number">%1$d</string>
+    <string name="points">%1$d</string>
+
+    <!-- Exercise Item Strings -->
+    <string name="exercise_name">Име на упражнение</string>
+    <string name="edit_exercise">Редактирай</string>
+    <string name="exercise_details">Детайли за упражнение</string>
+    <string name="activity_description">Описание на дейност</string>
+
+    <!-- Achievement Item Strings -->
+    <string name="goal_name">Име на цел</string>
+    <string name="progress_text">Текущ прогрес</string>
+    <string name="progress_hint">Въведи прогрес</string>
+    <string name="update_button">Обнови</string>
+    <string name="delete_button">Изтрий</string>
+
+    <!-- Dialog Edit Exercise Strings -->
+    <string name="activity_label">Дейност</string>
+    <string name="weight_hint">Тегло (кг)</string>
+    <string name="reps_hint">Повторения</string>
+    <string name="sets_hint">Серии</string>
+    <string name="save_changes">Запази промените</string>
+
+    <!-- Dialog Add Workout Strings -->
+    <string name="workout_name_hint">Име на тренировка</string>
+    <string name="workout_timer_hint">Таймер на тренировка (секунди)</string>
+    <string name="save">Запази</string>
+
+    <!-- Dialog Add Location Strings -->
+    <string name="location_name_hint">Име на място</string>
+    <string name="latitude_hint">Географска ширина (напр. 42.6500)</string>
+    <string name="longitude_hint">Географска дължина (напр. 23.4134)</string>
+    <string name="address_hint">Адрес</string>
+    <string name="description_hint">Описание (по избор)</string>
+
+    <!-- Dialog Add Exercise Strings -->
+    <string name="select_activity">Избери дейност</string>
+    <string name="save_exercise">Запази упражнение</string>
+
+    <!-- Coach Item Strings -->
+    <string name="remove_coach">Премахни</string>
+    <string name="registration_title">TU Fitness</string>
+    <string name="email_hint">Имейл</string>
+    <string name="username_hint">Потребителско име</string>
+    <string name="password_hint">Парола</string>
+    <string name="confirm_password_hint">Потвърди паролата</string>
+    <string name="register_button">Регистрация</string>
+    <string name="or_divider">ИЛИ</string>
+    <string name="login_redirect">Вече имаш акаунт? Влез</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">Моят профил</string>
+    <string name="name_hint">Име</string>
+    <string name="gender_label">Пол</string>
+    <string name="phone_hint">Телефон</string>
+    <string name="birth_date_label">Дата на раждане</string>
+    <string name="birth_date_hint">Избери дата</string>
+    <string name="height_hint">Височина (см)</string>
+    <string name="weight_hint_kg">Тегло (кг)</string>
+    <string name="update_profile_button">Обнови профила</string>
+    <string name="delete_profile_button">Изтрий профила</string>
+
+    <!-- Workout Details Screen -->
+    <string name="workout_title_placeholder">Име на тренировка</string>
+    <string name="start_rest_button">Започни почивка</string>
+
+    <!-- User Locations Screen -->
+    <string name="locations_title">Търсиш фитнес? Избери си!</string>
+    <string name="set_location_button">Задай начално местоположение</string>
+
+    <!-- Coaches List Screen -->
+    <string name="coaches_title">Списък с треньори</string>
+
+    <!-- Calculator Selection Screen -->
+    <string name="calculator_title">Избери калкулатор</string>
+    <string name="calculator_subtitle">Изчисли за секунди</string>
+    <string name="bmi_calculator_button">BMI Калкулатор</string>
+    <string name="bmi_calculator_description">BMI калкулаторът изчислява индекса на телесната маса според възрастта.</string>
+    <string name="calorie_calculator_button">Калориен Калкулатор</string>
+    <string name="calorie_calculator_description">Калорийният калкулатор изчислява нужните калории за деня.</string>
+    <string name="bmi_calculator_title_correct">BMI Калкулатор</string>
+
+    <!-- Additional strings from activity_profile.xml -->
+    <string name="email_profile_hint">Имейл</string>
+
+    <!-- Additional strings from activity_pick_calculator.xml -->
+    <string name="choose_calculator">Избери калкулатор</string>
+
+    <!-- Additional strings from activity_meal_plan_page.xml -->
+    <string name="about_your_meals">За твоя хранителен режим</string>
+    <string name="food_choices_matter">Твоят избор на храна има значение!</string>
+    <string name="meal_plan_button">Хранителен план</string>
+    <string name="meal_plan_description">Вземи своя хранителен план според избраните калории.</string>
+    <string name="check_calories_button">Провери калории</string>
+    <string name="check_calories_description">Виж колко калории има в храната.</string>
+    <string name="eat_wise">Храни се разумно!!!</string>
+
+    <!-- Additional strings from activity_meal_plan.xml -->
+    <string name="find_meal_plan">Намери хранителен план</string>
+    <string name="enter_calories_hint">Въведи калории (kcal)</string>
+    <string name="search_button">Търси</string>
+    <string name="enter_calories_message">Въведи калории, за да откриеш своя план</string>
+    <string name="meal_plan_title">Намери своя хранителен план</string>
+
+    <!-- New strings from activity_main_workout.xml -->
+    <string name="workout_title">Тренировка</string>
+    <string name="add_workout">+</string>
+
+    <!-- New strings from activity_main.xml -->
+    <string name="app_title">TU Fitness</string>
+    <string name="login_button">Вход</string>
+    <string name="signup_prompt">Нямаш създаден акаунт? Регистрирай се</string>
+
+    <!-- LeaderBoard -->
+    <string name="leaderboard_title">Класация</string>
+
+    <!-- Home Page -->
+    <string name="app_name_part1">TU</string>
+    <string name="app_name_part2">Fitness</string>
+    <string name="meals_button">Хранителен режим</string>
+    <string name="locations_button">Локации</string>
+    <string name="calendar_button">Календар</string>
+    <string name="coach_button">Треньор</string>
+    <string name="social_button">Социална мрежа</string>
+    <string name="friends_button">Приятели</string>
+    <string name="calculator_button">Калкулатор</string>
+    <string name="leaderboard_button">Класация</string>
+    <string name="challenges_button">Предизвикателства</string>
+    <string name="workout_button">Тренировка</string>
+
+    <!-- Check Calories -->
+    <string name="check_food_calories_title">Провери калориите на храната</string>
+    <string name="food_search_hint">Въведи храна (напр. 1кг ребра и картофи)</string>
+    <string name="empty_search_state">Въведи храна, за да видиш информация</string>
+
+    <!-- Challenge Proof -->
+    <string name="challenge_proof_title">Доказателство за предизвикателство</string>
+    <string name="challenge_title_placeholder">Заглавие на предизвикателство</string>
+    <string name="challenge_description_placeholder">Описание на предизвикателството...</string>
+    <string name="challenge_difficulty_format">Трудност: %1$s</string>
+    <string name="challenge_points_format">%1$d</string>
+    <string name="before_label">Преди</string>
+    <string name="after_label">След</string>
+    <string name="take_before_photo">Снимай се преди</string>
+    <string name="take_after_photo">Снимай се след</string>
+    <string name="experience_question">Как беше преживяването?</string>
+    <string name="experience_hint">Сподели впечатленията си...</string>
+    <string name="submit_experience">Изпрати</string>
+    <string name="complete_challenge">Завърши предизвикателството</string>
+    <string name="before_image_description">Изображение "преди"</string>
+    <string name="after_image_description">Изображение "след"</string>
+
+    <!-- Challenge -->
+    <string name="challenges_title">Предизвикателства</string>
+    <string name="dumbbell_icon_description">Икона с дъмбел</string>
+    <string name="greeting_message">Здравей, потребителю!\nГотов/а ли си за днешните предизвикателства? :)</string>
+    <string name="confirm_button">Потвърди</string>
+
+    <!-- Challenge Animation -->
+    <string name="congrats_text">Поздравления!\nТи си супер!</string>
+    <string name="points_earned_label">СПЕЧЕЛИ</string>
+    <string name="dumbbell_image_description">Изображение с дъмбел</string>
+    <string name="continue_button">ПРОДЪЛЖИ</string>
+
+    <!-- BMI Calculator -->
+    <string name="bmi_calculator_title">BMI Калкулатор</string>
+    <string name="weight_label">Тегло</string>
+    <string name="kg_unit">Кг</string>
+    <string name="height_label">Височина</string>
+    <string name="cm_unit">См</string>
+    <string name="calculate_button">Изчисли</string>
+    <string name="home_button">Начало</string>
+
+    <!-- Calorie Calculator -->
+    <string name="calorie_calculator_title">BMI Калкулатор</string>
+    <string name="age_label">Възраст</string>
+    <string name="years_unit">Години</string>
+    <string name="male_label">Мъж</string>
+    <string name="female_label">Жена</string>
+
+    <!-- Calendar -->
+    <string name="calendar_screen_title">Календар</string>
+    <string name="select_date_prompt">Избери дата</string>
+    <string name="tap_date_instructions">Натисни дата, за да избереш/премахнеш</string>
+    <string name="all_selected_dates_heading">Избрани дати:</string>
+    <string name="sunday_initial">Н</string>
+    <string name="monday_initial">П</string>
+    <string name="tuesday_initial">В</string>
+    <string name="wednesday_initial">С</string>
+    <string name="thursday_initial">Ч</string>
+    <string name="friday_initial">П</string>
+    <string name="saturday_initial">С</string>
+    <string name="home_button_text">Начало</string>
+
+    <!-- Admin Coaches -->
+    <string name="admin_coaches_title">Списък с треньори</string>
+    <string name="coach_name_hint">Име на треньор</string>
+    <string name="coach_specialization_hint">Специализация</string>
+    <string name="coach_contact_info_hint">Контактна информация</string>
+    <string name="add_coach_button">Добави треньор</string>
+
+    <!-- Admin Locations -->
+    <string name="admin_locations_title">Управление на места</string>
+    <string name="add_location_button">Добави място</string>
+
+    <!-- Some toast messages -->
+    <string name="database_error">Грешка с базата данни</string>
+    <!-- Register Activity Toast Messages -->
+    <string name="toast_empty_fields">Моля попълнете всички полета</string>
+    <string name="toast_passwords_mismatch">Паролите не съвпадат</string>
+    <string name="toast_password_requirements">Паролата трябва да е поне 8 символа дълга и да съдържа\n- Главна буква\n- Малка буква\n- Цифра\n- Специален знак (!@#$%^&amp;*()_+)</string>
+    <string name="toast_invalid_email">Моля попълнете валиден имейл адрес!</string>
+    <string name="toast_username_taken">Името вече е заето</string>
+    <string name="toast_email_registered">Имейлът вече е регистриран</string>
+    <string name="toast_register_success">Потребителят е регистриран успешно!</string>
+    <string name="toast_register_fail">Грешка при регистрирането на потребителя: %1$s</string>
+
+    <!-- Login Activity Toast Messages -->
+    <string name="toast_db_init_error">Грешка при стартиране на приложението: %1$s</string>
+    <string name="toast_login_empty_fields">Моля попълнете всички полета</string>
+    <string name="toast_login_success">Потребителят е регистриран успешно!</string>
+    <string name="toast_login_fail">Грешка при регистрирането на потребителя: %1$s</string>
+    <string name="toast_login_error">Неочаквана грешка: %1$s</string>
+    <string name="toast_login_attempts">Твърде много провалени опити за влизане!</string>
+    <string name="toast_invalid_credentials">Невалиден имейл или парола!</string>
+
+    <!-- Profile Activity Toast Messages -->
+    <string name="toast_invalid_user_id">Невалидно потребителско ID</string>
+    <string name="toast_avatar_updated">Аватарът е успешно променен!</string>
+    <string name="toast_user_id_not_found">Потребителят не е намерен</string>
+    <string name="toast_user_info_not_found">Данните за потребителя не са намерени</string>
+    <string name="toast_profile_updated">Профилът е променен успешно</string>
+    <string name="toast_profile_deleted">Профилът е изтрит успешно</string>
+
+    <!-- Post Activity Toast Messages -->
+    <string name="toast_invalid_user">Невалиден потребител</string>
+    <string name="toast_empty_post_fields">Заглавието и описанието не могат да бъдат празни!</string>
+    <string name="toast_post_created">Постът е създаден успешно!</string>
+    <string name="toast_delete_own_posts">Можеш да изтриваш само собствените си постове!</string>
+    <string name="toast_camera_permission_denied">Няма достъп до камера!</string>
+    <string name="toast_camera_error">Грешка камера: %1$s</string>
+
+    <!-- Friends Activity Toast Messages -->
+    <string name="toast_enter_username">Въведи име</string>
+    <string name="toast_user_not_found">Потребителят не е намерен</string>
+    <string name="toast_cannot_add_self">Не можеш да изпратиш покана на себе си</string>
+    <string name="toast_already_added">Вече добавен</string>
+    <string name="toast_cannot_delete_self">Не можеш да се изтриеш </string>
+    <string name="toast_user_deleted">Потребителят е изтрит от приятели!</string>
+</resources>
