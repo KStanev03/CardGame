@@ -13,6 +13,9 @@
         android:theme="@style/Theme.CardGame"
         tools:targetApi="31">
         <activity
+            android:name=".ShopActivity"
+            android:exported="false" />
+        <activity
             android:name=".AchievementActivity"
             android:exported="false" />
         <activity

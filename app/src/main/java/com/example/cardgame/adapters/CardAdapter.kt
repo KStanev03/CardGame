@@ -1,11 +1,8 @@
-package com.example.cardgame.adapters;
+package com.example.cardgame.adapters
 
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cardgame.R
@@ -13,39 +10,36 @@ import com.example.cardgame.domain.model.Card
 
 class CardAdapter(
     private val cards: List<Card>,
-    private val onCardClick: (Int) -> Unit,
-    private val cardWidth: Int = ViewGroup.LayoutParams.WRAP_CONTENT
+    private val onCardClicked: (Int) -> Unit,
+    private val cardWidth: Int,
+    private val resourcePrefix: String = "card_" // Default to classic deck
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
-    class CardViewHolder(val cardView: FrameLayout) : RecyclerView.ViewHolder(cardView)
+    class CardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val cardImage: ImageView = view.findViewById(R.id.cardImage)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        val cardView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_item, parent, false) as FrameLayout
-
-        cardView.layoutParams = ViewGroup.LayoutParams(
-            cardWidth,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-
-        return CardViewHolder(cardView)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_card, parent, false)
+        return CardViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val card = cards[position]
-        val imageView = holder.cardView.findViewById<ImageView>(R.id.cardImageView)
 
-        imageView.setImageResource(card.getImageResourceId())
+        // Use the resource prefix to load the correct card image
+        holder.cardImage.setImageResource(card.getImageResourceId(resourcePrefix))
 
-        holder.cardView.setOnClickListener {
-            // Apply a click animation
-            val clickAnim = AnimationUtils.loadAnimation(holder.cardView.context, R.anim.card_click)
-            holder.cardView.startAnimation(clickAnim)
+        // Set card width
+        val params = holder.cardImage.layoutParams
+        params.width = cardWidth
+        params.height = (cardWidth * 1.4).toInt() // Standard card ratio
+        holder.cardImage.layoutParams = params
 
-            // Delay the actual click action to let the animation play
-            Handler(Looper.getMainLooper()).postDelayed({
-                onCardClick(position)
-            }, 200)
+        // Set click listener
+        holder.itemView.setOnClickListener {
+            onCardClicked(position)
         }
     }
 

@@ -12,21 +12,28 @@ import com.example.cardgame.datamanager.achievement.Achievement
 import com.example.cardgame.datamanager.achievement.AchievementDAO
 import com.example.cardgame.datamanager.history.GameHistory
 import com.example.cardgame.datamanager.history.GameHistoryDAO
+import com.example.cardgame.datamanager.deck.Deck
+import com.example.cardgame.datamanager.deck.DeckDAO
+import com.example.cardgame.datamanager.deck.UserDeck
+import com.example.cardgame.datamanager.deck.UserDeckDAO
 
 @Database(
     entities = [
-        User::class, UserInfo::class,  Achievement::class, GameHistory::class
+        User::class, UserInfo::class, Achievement::class, GameHistory::class,
+        Deck::class, UserDeck::class
     ],
-    version = 7
+    version = 8
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun userInfoDAO(): UserInfoDAO
     abstract fun achievementDAO(): AchievementDAO
     abstract fun gameHistoryDAO(): GameHistoryDAO
+    abstract fun deckDAO(): DeckDAO
+    abstract fun userDeckDAO(): UserDeckDAO
 
     companion object {
-        private const val DATABASE_NAME = "cardgame.db" // Corrected database name
+        private const val DATABASE_NAME = "cardgame.db"
 
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -40,7 +47,11 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         DATABASE_NAME
-                    ).allowMainThreadQueries().build()
+                    ).fallbackToDestructiveMigration() // This will recreate the database if version changes
+                        .allowMainThreadQueries()
+                        .build()
+
+                    INSTANCE = instance
                 }
                 return instance
             }

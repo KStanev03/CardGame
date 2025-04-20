@@ -22,6 +22,9 @@ import com.example.cardgame.datamanager.AppDatabase
 import com.example.cardgame.GameCompletionHandler
 import com.example.cardgame.services.GameService
 import kotlinx.coroutines.launch
+import com.example.cardgame.datamanager.deck.DeckManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class GameActivity : AppCompatActivity() {
@@ -57,6 +60,9 @@ class GameActivity : AppCompatActivity() {
         BOTTOM, LEFT, TOP, RIGHT
     }
 
+    private lateinit var deckManager: DeckManager
+    private var activeResourcePrefix = "card_"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -81,6 +87,7 @@ class GameActivity : AppCompatActivity() {
         // Initialize the Game Service
         gameService = GameService(this)
 
+        deckManager = DeckManager(this)
         // Get current user ID from logged in user
         // This assumes there's a way to get the current user ID - using LoggedUser singleton
         val username = LoggedUser.getUsername()
@@ -112,6 +119,8 @@ class GameActivity : AppCompatActivity() {
 
         // Reset game end flag
         gameEndHandled = false
+
+        loadActiveDeckPrefix()
 
         // Add players (0 is human, others are AI)
         game.addPlayer("You", 0, true)
@@ -153,9 +162,14 @@ class GameActivity : AppCompatActivity() {
             emptyList()
         }
 
-        tableCardsView.adapter = CardAdapter(visibleTableCards, { _ ->
-            // Nothing happens when clicking table cards
-        }, resources.getDimensionPixelSize(R.dimen.card_width))
+        tableCardsView.adapter = CardAdapter(
+            visibleTableCards,
+            { _ ->
+                // Nothing happens when clicking table cards
+            },
+            resources.getDimensionPixelSize(R.dimen.card_width),
+            activeResourcePrefix
+        )
 
         // Update game log
         val logMessages = game.getLogMessages().takeLast(5)
@@ -163,11 +177,16 @@ class GameActivity : AppCompatActivity() {
 
         // Always show the human player's hand regardless of whose turn it is
         val humanPlayer = game.getPlayers().first { it.isHuman }
-        handRecyclerView.adapter = CardAdapter(humanPlayer.hand, { cardIndex ->
-            if (!isAnimating && isHumanTurn) {
-                handleCardPlay(cardIndex)
-            }
-        }, resources.getDimensionPixelSize(R.dimen.card_width))
+        handRecyclerView.adapter = CardAdapter(
+            humanPlayer.hand,
+            { cardIndex ->
+                if (!isAnimating && isHumanTurn) {
+                    handleCardPlay(cardIndex)
+                }
+            },
+            resources.getDimensionPixelSize(R.dimen.card_width),
+            activeResourcePrefix
+        )
         handRecyclerView.visibility = View.VISIBLE
 
         // Check if game is complete
@@ -240,7 +259,7 @@ class GameActivity : AppCompatActivity() {
 
         // Show the played card in center
         val playedCardImage = playCardView.findViewById<ImageView>(R.id.playedCardImage)
-        playedCardImage.setImageResource(card.getImageResourceId())
+        playedCardImage.setImageResource(card.getImageResourceId(activeResourcePrefix))
         playCardView.visibility = View.VISIBLE
 
         // Apply card play animation based on player position
@@ -331,7 +350,7 @@ class GameActivity : AppCompatActivity() {
                 if (result.success) {
                     // Show the played card in center
                     val playedCardImage = playCardView.findViewById<ImageView>(R.id.playedCardImage)
-                    playedCardImage.setImageResource(game.lastPlayedCard!!.getImageResourceId())
+                    playedCardImage.setImageResource(game.lastPlayedCard!!.getImageResourceId(activeResourcePrefix))
                     playCardView.visibility = View.VISIBLE
 
                     // Apply card play animation based on AI player position
@@ -454,5 +473,20 @@ class GameActivity : AppCompatActivity() {
             }
             .setCancelable(false)
             .show()
+    }
+
+    private fun loadActiveDeckPrefix() {
+        if (currentUserId != -1) {
+            lifecycleScope.launch {
+                try {
+                    activeResourcePrefix = withContext(Dispatchers.IO) {
+                        deckManager.getActiveResourcePrefix(currentUserId)
+                    }
+                } catch (e: Exception) {
+                    // Fallback to default prefix
+                    activeResourcePrefix = "card_"
+                }
+            }
+        }
     }
 }
