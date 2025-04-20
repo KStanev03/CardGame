@@ -1,4 +1,4 @@
-package com.example.cardgame.domain.game
+package com.example.cardgame
 
 import android.content.Context
 import com.example.cardgame.datamanager.LoggedUser

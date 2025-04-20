@@ -19,7 +19,7 @@ import com.example.cardgame.domain.game.PastraGame
 import com.example.cardgame.adapters.CardAdapter
 import com.example.cardgame.datamanager.LoggedUser
 import com.example.cardgame.datamanager.AppDatabase
-import com.example.cardgame.domain.game.GameCompletionHandler
+import com.example.cardgame.GameCompletionHandler
 import com.example.cardgame.services.GameService
 import kotlinx.coroutines.launch
 

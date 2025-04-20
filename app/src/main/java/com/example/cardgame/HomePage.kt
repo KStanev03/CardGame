@@ -2,6 +2,8 @@ package com.example.cardgame
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -23,6 +25,7 @@ class HomePage : AppCompatActivity() {
 
             if (userId != -1) {
                 checkAndInitializeAchievements(userId)
+                loadUserCoins(userId)
             }
 
             // Profile button
@@ -35,6 +38,7 @@ class HomePage : AppCompatActivity() {
             // Play button
             findViewById<CardView>(R.id.cardPlay).setOnClickListener {
                 val intent = Intent(this, GameActivity::class.java)
+                intent.putExtra("USER_ID", userId)
                 startActivity(intent)
             }
 
@@ -62,13 +66,41 @@ class HomePage : AppCompatActivity() {
 //                val intent = Intent(this, TournamentsActivity::class.java)
 //                startActivity(intent)
 //            }
-            findViewById<MaterialButton>(R.id.achievementsButton).setOnClickListener {
+            val achievementsButton = findViewById<Button>(R.id.achievementsButton)
+            achievementsButton.setOnClickListener {
                 val intent = Intent(this, AchievementActivity::class.java)
                 intent.putExtra("USER_ID", userId)
                 startActivity(intent)
             }
 
         }
+    private fun loadUserCoins(userId: Int) {
+        if (userId == -1) return
+
+        val db = AppDatabase.getInstance(applicationContext)
+        val userInfoDAO = db.userInfoDAO()
+        val tvCoins = findViewById<TextView>(R.id.tvCoins)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val userInfo = userInfoDAO.getUserInfoByUserId(userId)
+                withContext(Dispatchers.Main) {
+                    userInfo?.let {
+                        tvCoins.text = it.money.toString()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@HomePage,
+                        "Error loading coins: ${e.localizedMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
     private fun checkAndInitializeAchievements(userId: Int) {
         lifecycleScope.launch {
             val achievementManager = AchievementManager(this@HomePage)

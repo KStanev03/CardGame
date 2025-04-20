@@ -7,23 +7,6 @@
     android:background="@color/background_color"
     tools:context=".HomePage">
 
-    <Button
-        android:id="@+id/achievementsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:paddingStart="12dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="6dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/black"
-        android:text="Achievments"
-        android:textColor="#FFFFFF"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tvAppTitle"
         android:layout_width="wrap_content"
@@ -37,12 +20,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Points Display -->
+    <!-- Coins Display -->
+
     <LinearLayout
-        android:id="@+id/pointsContainer"
+        android:id="@+id/coinsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/points_background"
         android:gravity="center_vertical"
@@ -57,11 +41,11 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:contentDescription="Points icon"
-            android:src="@drawable/ic_points" />
+            android:contentDescription="Coins icon"
+            android:src="@drawable/ic_coins" />
 
         <TextView
-            android:id="@+id/tvPoints"
+            android:id="@+id/tvCoins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -70,6 +54,23 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/achievementsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/black"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
+        android:text="Achievments"
+        android:textColor="#FFFFFF"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.gridlayout.widget.GridLayout
         android:layout_width="0dp"
