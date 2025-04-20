@@ -287,4 +287,11 @@ class PastraGame {
     fun getPlayers(): List<Player> {
         return players.toList()
     }
+    fun getPastrasCountForTeam(teamId: Int): Int {
+        return teams[teamId].players.sumOf { player ->
+            // Count Pastra points / 10 since each Pastra is worth 10 points
+            // (Jack Pastra is 20 points, so counts as 2)
+            player.pastraPoints / 10
+        }
+    }
 }

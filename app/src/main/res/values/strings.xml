@@ -321,4 +321,13 @@
     <string name="toast_already_added">Вече добавен</string>
     <string name="toast_cannot_delete_self">Не можеш да се изтриеш </string>
     <string name="toast_user_deleted">Потребителят е изтрит от приятели!</string>
+
+    <!-- History Activity -->
+    <string name="game_history">История на игрите</string>
+    <string name="game_stats">Статистика</string>
+    <string name="wins_count">Победи: %1$d</string>
+    <string name="losses_count">Загуби: %1$d</string>
+    <string name="recent_games">Скорошни игри</string>
+    <string name="no_game_history">Няма налична история. Играй няколко игри!</string>
+    <string name="vs">vs</string>
 </resources>

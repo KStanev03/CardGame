@@ -45,7 +45,8 @@
     <color name="purple30">#917AB2</color>
     <color name="purple40">#9979BA</color>
     <color name="purple50">#43256F</color>
-
+    <color name="win_color">#4CAF50</color>
+    <color name="loss_color">#F44336</color>
 
     <!--<color name="black">#FF000000</color>-->
     <!--<color name="white">#FFFFFFFF</color>-->

@@ -32,10 +32,11 @@ class HomePage : AppCompatActivity() {
             }
 
 //            // History button
-//            findViewById<CardView>(R.id.cardHistory).setOnClickListener {
-//                val intent = Intent(this, HistoryActivity::class.java)
-//                startActivity(intent)
-//            }
+            findViewById<CardView>(R.id.cardHistory).setOnClickListener {
+                val intent = Intent(this, HistoryActivity::class.java)
+                intent.putExtra("USER_ID", userId)
+                startActivity(intent)
+           }
 //
 //            // Shop button
 //            findViewById<CardView>(R.id.cardShop).setOnClickListener {

@@ -13,8 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.example.cardgame.domain.game.PastraGame
 import com.example.cardgame.adapters.CardAdapter
+import com.example.cardgame.datamanager.LoggedUser
+import com.example.cardgame.datamanager.AppDatabase
+import com.example.cardgame.services.GameService
+import kotlinx.coroutines.launch
 
 
 class GameActivity : AppCompatActivity() {
@@ -27,11 +33,15 @@ class GameActivity : AppCompatActivity() {
     private lateinit var gameLogTextView: TextView
     private lateinit var playCardView: FrameLayout
     private lateinit var newGameButton: Button
+    private lateinit var gameService: GameService
 
     private var gameEndHandled = false
 
     private var humanPlayerIndex = 0
     private val handler = Handler(Looper.getMainLooper())
+
+    // User ID for database operations
+    private var currentUserId: Int = -1
 
     // Animation control flags
     private var isAnimating = false
@@ -67,8 +77,26 @@ class GameActivity : AppCompatActivity() {
         // Set up play area for animations
         playCardView.visibility = View.INVISIBLE
 
-        // Set up game
-        setupGame()
+        // Initialize the Game Service
+        gameService = GameService(this)
+
+        // Get current user ID from logged in user
+        // This assumes there's a way to get the current user ID - using LoggedUser singleton
+        val username = LoggedUser.getUsername()
+        if (username != null) {
+            lifecycleScope.launch {
+                val db = AppDatabase.getInstance(applicationContext)
+                val user = db.userDAO().findByUsername(username)
+                if (user != null) {
+                    currentUserId = user.uid
+                }
+                // Set up game after getting user ID
+                setupGame()
+            }
+        } else {
+            // Fallback if no user logged in - dev/testing mode
+            setupGame()
+        }
 
         // Set up new game button (previously next button)
         newGameButton.text = "New Game"
@@ -102,6 +130,7 @@ class GameActivity : AppCompatActivity() {
         // Automatically start AI turns if human isn't first
         processNextTurn()
     }
+
     private fun updateUI() {
         val currentPlayer = game.getCurrentPlayer()
         val isHumanTurn = currentPlayer.isHuman
@@ -370,16 +399,73 @@ class GameActivity : AppCompatActivity() {
 
         // Determine winner
         val winningTeam = game.getWinningTeam()
+        val humanTeamId = game.getPlayers().first { it.isHuman }.teamId
+        val isWin = winningTeam?.id == humanTeamId
+
+        val scoreString = "${scores[0]} - ${scores[1]}"
         val message = if (winningTeam != null) {
             "${winningTeam.name} wins with ${scores[winningTeam.id]} points!"
         } else {
             "It's a tie!"
         }
 
-        // Show game over dialog
-        Toast.makeText(this, "Game Over! $message", Toast.LENGTH_LONG).show()
+        // Calculate points earned by the human's team
+        val pointsEarned = scores[humanTeamId] ?: 0
 
-        // Show new game button
-        newGameButton.visibility = View.VISIBLE
+        // Save game results to database if user is logged in
+        if (currentUserId != -1) {
+            // Save results in coroutine
+            lifecycleScope.launch {
+                try {
+                    gameService.saveGameResults(
+                        userId = currentUserId,
+                        isWin = isWin,
+                        score = scoreString,
+                        pointsEarned = pointsEarned
+                    )
+
+                    // Show update message after saving to DB
+                    val rewardsMsg = if (isWin) {
+                        val moneyEarned = 10 + (pointsEarned / 2)
+                        "You earned $pointsEarned points and $moneyEarned coins!"
+                    } else {
+                        val moneyEarned = 5 + (pointsEarned / 2)
+                        "You earned $pointsEarned points and $moneyEarned coins."
+                    }
+
+                    runOnUiThread {
+                        showGameEndDialog(message, rewardsMsg)
+                    }
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        Toast.makeText(this@GameActivity,
+                            "Error saving game results: ${e.message}",
+                            Toast.LENGTH_SHORT).show()
+                        showGameEndDialog(message, "")
+                    }
+                }
+            }
+        } else {
+            // Just show game over dialog without DB updates
+            showGameEndDialog(message, "")
+        }
+    }
+
+    private fun showGameEndDialog(resultMessage: String, rewardsMessage: String) {
+        val fullMessage = if (rewardsMessage.isNotEmpty()) {
+            "$resultMessage\n\n$rewardsMessage"
+        } else {
+            resultMessage
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Game Over")
+            .setMessage(fullMessage)
+            .setPositiveButton("OK") { _, _ ->
+                // Show new game button
+                newGameButton.visibility = View.VISIBLE
+            }
+            .setCancelable(false)
+            .show()
     }
 }
