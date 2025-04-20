@@ -19,6 +19,7 @@ import com.example.cardgame.domain.game.PastraGame
 import com.example.cardgame.adapters.CardAdapter
 import com.example.cardgame.datamanager.LoggedUser
 import com.example.cardgame.datamanager.AppDatabase
+import com.example.cardgame.domain.game.GameCompletionHandler
 import com.example.cardgame.services.GameService
 import kotlinx.coroutines.launch
 
@@ -399,56 +400,42 @@ class GameActivity : AppCompatActivity() {
 
         // Determine winner
         val winningTeam = game.getWinningTeam()
-        val humanTeamId = game.getPlayers().first { it.isHuman }.teamId
-        val isWin = winningTeam?.id == humanTeamId
-
-        val scoreString = "${scores[0]} - ${scores[1]}"
         val message = if (winningTeam != null) {
             "${winningTeam.name} wins with ${scores[winningTeam.id]} points!"
         } else {
             "It's a tie!"
         }
 
-        // Calculate points earned by the human's team
-        val pointsEarned = scores[humanTeamId] ?: 0
+        // Show game over dialog
+        Toast.makeText(this, "Game Over! $message", Toast.LENGTH_LONG).show()
 
-        // Save game results to database if user is logged in
-        if (currentUserId != -1) {
-            // Save results in coroutine
-            lifecycleScope.launch {
-                try {
-                    gameService.saveGameResults(
-                        userId = currentUserId,
-                        isWin = isWin,
-                        score = scoreString,
-                        pointsEarned = pointsEarned
-                    )
+        // Get the logged-in user ID
+        val userId = intent.getIntExtra("USER_ID", -1)
 
-                    // Show update message after saving to DB
-                    val rewardsMsg = if (isWin) {
-                        val moneyEarned = 10 + (pointsEarned / 2)
-                        "You earned $pointsEarned points and $moneyEarned coins!"
-                    } else {
-                        val moneyEarned = 5 + (pointsEarned / 2)
-                        "You earned $pointsEarned points and $moneyEarned coins."
-                    }
+        // If user is logged in, update their achievements and history
+        if (userId != -1) {
+            // Check if player's team won
+            val isPlayerWinner = (winningTeam?.id == 0) // Team 0 is player's team
 
-                    runOnUiThread {
-                        showGameEndDialog(message, rewardsMsg)
-                    }
-                } catch (e: Exception) {
-                    runOnUiThread {
-                        Toast.makeText(this@GameActivity,
-                            "Error saving game results: ${e.message}",
-                            Toast.LENGTH_SHORT).show()
-                        showGameEndDialog(message, "")
-                    }
-                }
-            }
-        } else {
-            // Just show game over dialog without DB updates
-            showGameEndDialog(message, "")
+            // Get player's score (Team 1 score)
+            val playerScore = scores[0] ?: 0
+
+            // Get AI's score (Team 2 score)
+            val aiScore = scores[1] ?: 0
+
+            // Handle game completion (update history, achievements, etc.)
+            val gameCompletionHandler = GameCompletionHandler(this)
+            gameCompletionHandler.handleGameCompletion(
+                userId,
+                isPlayerWinner,
+                playerScore,
+                aiScore,
+                lifecycleScope
+            )
         }
+
+        // Show new game button
+        newGameButton.visibility = View.VISIBLE
     }
 
     private fun showGameEndDialog(resultMessage: String, rewardsMessage: String) {

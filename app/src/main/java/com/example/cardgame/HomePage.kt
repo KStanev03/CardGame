@@ -5,18 +5,25 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import  com.example.cardgame.datamanager.AppDatabase
+import com.example.cardgame.datamanager.achievement.AchievementManager
+import com.google.android.material.button.MaterialButton
 
 class HomePage : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_home_page)
             val userId = intent.getIntExtra("USER_ID", -1)
+
+            if (userId != -1) {
+                checkAndInitializeAchievements(userId)
+            }
 
             // Profile button
             findViewById<CardView>(R.id.cardProfile).setOnClickListener {
@@ -55,8 +62,24 @@ class HomePage : AppCompatActivity() {
 //                val intent = Intent(this, TournamentsActivity::class.java)
 //                startActivity(intent)
 //            }
-        }
+            findViewById<MaterialButton>(R.id.achievementsButton).setOnClickListener {
+                val intent = Intent(this, AchievementActivity::class.java)
+                intent.putExtra("USER_ID", userId)
+                startActivity(intent)
+            }
 
+        }
+    private fun checkAndInitializeAchievements(userId: Int) {
+        lifecycleScope.launch {
+            val achievementManager = AchievementManager(this@HomePage)
+            val achievements = achievementManager.getUserAchievements(userId)
+
+            // If user has no achievements, initialize them
+            if (achievements.isEmpty()) {
+                achievementManager.initializeAchievementsForUser(userId)
+            }
+        }
+    }
 
     private fun loadUserAvatar(userId: Int, imageView: CircleImageView) {
         if (userId == -1) return
