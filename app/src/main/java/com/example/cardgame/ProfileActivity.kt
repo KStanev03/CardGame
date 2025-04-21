@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 // Add these imports to ProfileActivity.kt
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -343,16 +344,31 @@ class Profile : AppCompatActivity() {
     }
 
     private suspend fun updateLocationDisplay() {
+        // Show a loading indicator
+        withContext(Dispatchers.Main) {
+            locationTextView.text = "Fetching location..."
+            updateLocationButton.isEnabled = false
+        }
+
         val locationResult = locationHelper.getCurrentLocation()
 
         withContext(Dispatchers.Main) {
+            updateLocationButton.isEnabled = true
+
             when (locationResult) {
                 is LocationResult.Success -> {
+                    Log.d("ProfileActivity", "Location success: ${locationResult.locationName}")
                     locationTextView.text = locationResult.locationName
                     // Update the database with the new location
                     updateUserLocation(locationResult.locationName)
+                    Toast.makeText(
+                        this@Profile,
+                        "Location updated successfully!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 is LocationResult.Error -> {
+                    Log.e("ProfileActivity", "Location error: ${locationResult.message}")
                     Toast.makeText(
                         this@Profile,
                         "Error getting location: ${locationResult.message}",
