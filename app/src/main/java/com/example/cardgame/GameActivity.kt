@@ -429,8 +429,8 @@ class GameActivity : AppCompatActivity() {
         // Show game over dialog
         Toast.makeText(this, "Game Over! $message", Toast.LENGTH_LONG).show()
 
-        // Get the logged-in user ID
-        val userId = intent.getIntExtra("USER_ID", -1)
+        // Get the logged-in user ID - use LoggedUser if userId from intent is invalid
+        val userId = intent.getIntExtra("USER_ID", -1).takeIf { it != -1 } ?: LoggedUser.getUserId()
 
         // If user is logged in, update their achievements and history
         if (userId != -1) {
@@ -443,7 +443,17 @@ class GameActivity : AppCompatActivity() {
             // Get AI's score (Team 2 score)
             val aiScore = scores[1] ?: 0
 
-            // Handle game completion (update history, achievements, etc.)
+            // Use GameService to save results and handle rewards
+            lifecycleScope.launch {
+                gameService.saveGameResults(
+                    userId,
+                    isPlayerWinner,
+                    "$playerScore-$aiScore",
+                    playerScore
+                )
+            }
+
+            // Also handle achievements via the completion handler
             val gameCompletionHandler = GameCompletionHandler(this)
             gameCompletionHandler.handleGameCompletion(
                 userId,
