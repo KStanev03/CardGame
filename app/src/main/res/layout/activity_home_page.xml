@@ -7,27 +7,28 @@
     android:background="@color/background_color"
     tools:context=".HomePage">
 
+    <!-- Coins Display -->
+
+
     <TextView
         android:id="@+id/tvAppTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="48dp"
         android:text="ПАСТРА"
         android:textColor="@color/primary_text"
         android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Coins Display -->
 
     <LinearLayout
         android:id="@+id/coinsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/points_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -49,28 +50,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="1,250"
+            android:text="0"
             android:textColor="@color/primary_text"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/achievementsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/black"
-        android:paddingStart="12dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="6dp"
-        android:text="Achievments"
-        android:textColor="#FFFFFF"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.gridlayout.widget.GridLayout
         android:layout_width="0dp"
@@ -278,7 +262,7 @@
 
         <!-- Tournaments Button -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardTournaments"
+            android:id="@+id/cardAchievements"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="8dp"
@@ -302,23 +286,15 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_tournament"
-                    android:contentDescription="Tournaments icon" />
+                    android:contentDescription="Achievement icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Турнири"
+                    android:text="Постижения"
                     android:textColor="@color/primary_text"
                     android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Около теб"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

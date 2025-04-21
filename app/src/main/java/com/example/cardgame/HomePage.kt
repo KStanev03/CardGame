@@ -61,14 +61,8 @@ class HomePage : AppCompatActivity() {
 //                val intent = Intent(this, TutorialActivity::class.java)
 //                startActivity(intent)
 //            }
-//
-//            // Tournaments button
-//            findViewById<CardView>(R.id.cardTournaments).setOnClickListener {
-//                val intent = Intent(this, TournamentsActivity::class.java)
-//                startActivity(intent)
-//            }
-            val achievementsButton = findViewById<Button>(R.id.achievementsButton)
-            achievementsButton.setOnClickListener {
+
+            findViewById<CardView>(R.id.cardAchievements).setOnClickListener {
                 val intent = Intent(this, AchievementActivity::class.java)
                 intent.putExtra("USER_ID", userId)
                 startActivity(intent)
