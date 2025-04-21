@@ -123,7 +123,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tableCardsRecyclerView"
         android:layout_width="100dp"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:clipToPadding="false"
@@ -249,9 +249,9 @@
         <ImageView
             android:id="@+id/playedCardImage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:contentDescription="Played card"/>
+            android:layout_height="144dp"
+            android:contentDescription="Played card"
+            android:scaleType="fitCenter" />
     </FrameLayout>
 
     <!-- Pastra Animation Text -->

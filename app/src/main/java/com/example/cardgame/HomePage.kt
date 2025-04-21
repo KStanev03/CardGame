@@ -50,10 +50,11 @@ class HomePage : AppCompatActivity() {
            }
 //
 //            // Shop button
-//            findViewById<CardView>(R.id.cardShop).setOnClickListener {
-//                val intent = Intent(this, ShopActivity::class.java)
-//                startActivity(intent)
-//            }
+            findViewById<CardView>(R.id.cardShop).setOnClickListener {
+                val intent = Intent(this, ShopActivity::class.java)
+                intent.putExtra("USER_ID", userId)
+               startActivity(intent)
+            }
 //
 //            // Tutorial button
 //            findViewById<CardView>(R.id.cardTutorial).setOnClickListener {

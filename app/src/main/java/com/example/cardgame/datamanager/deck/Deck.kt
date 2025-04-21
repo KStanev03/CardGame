@@ -27,11 +27,11 @@ data class Deck(
             ),
             Deck(
                 deckId = 2,
-                name = "Neon Deck",
+                name = "Unicorn Deck",
                 description = "A sleek neon design for your cards",
-                price = 250,
-                prefix = "neon_",
-                previewImageResId = R.drawable.card_king_of_hearts
+                price = 0,
+                prefix = "unicorn_",
+                previewImageResId = R.drawable.unicorn_king_of_hearts
             ),
             Deck(
                 deckId = 3,

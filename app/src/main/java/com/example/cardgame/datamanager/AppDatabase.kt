@@ -47,8 +47,7 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         DATABASE_NAME
-                    ).fallbackToDestructiveMigration() // This will recreate the database if version changes
-                        .allowMainThreadQueries()
+                    ).allowMainThreadQueries()
                         .build()
 
                     INSTANCE = instance
