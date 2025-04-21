@@ -69,6 +69,15 @@ class HomePage : AppCompatActivity() {
             }
 
         }
+    override fun onResume() {
+        super.onResume()
+
+        // Reload the user's coins every time the page is resumed
+        val userId = intent.getIntExtra("USER_ID", -1)
+        if (userId != -1) {
+            loadUserCoins(userId)
+        }
+    }
     private fun loadUserCoins(userId: Int) {
         if (userId == -1) return
 
