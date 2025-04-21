@@ -56,11 +56,11 @@ class HomePage : AppCompatActivity() {
                startActivity(intent)
             }
 //
-//            // Tutorial button
-//            findViewById<CardView>(R.id.cardTutorial).setOnClickListener {
-//                val intent = Intent(this, TutorialActivity::class.java)
-//                startActivity(intent)
-//            }
+            // Tutorial button
+            findViewById<CardView>(R.id.cardTutorial).setOnClickListener {
+                val intent = Intent(this, TutorialActivity::class.java)
+               startActivity(intent)
+            }
 
             findViewById<CardView>(R.id.cardAchievements).setOnClickListener {
                 val intent = Intent(this, AchievementActivity::class.java)

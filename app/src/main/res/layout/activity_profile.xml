@@ -15,7 +15,7 @@
         android:layout_height="70dp"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
-        android:text="Profile"
+        android:text="Профил"
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -54,7 +54,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:layout_gravity="center"
@@ -78,7 +78,7 @@
                             android:id="@+id/tEmailProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Email"
+                            android:hint="Имейл"
                             android:inputType="textEmailAddress"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey"
@@ -114,7 +114,7 @@
                             android:id="@+id/tUsernameProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Username"
+                            android:hint="Потребителско име"
                             android:inputType="textPersonName"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey"
@@ -150,7 +150,7 @@
                             android:id="@+id/tDisplayNameProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Display Name"
+                            android:hint="Показвано име"
                             android:inputType="textPersonName"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey"
@@ -160,31 +160,7 @@
                             android:padding="8dp"
                             android:paddingStart="40dp"/>
                     </com.google.android.material.textfield.TextInputLayout>
-                    <!-- Add this to the layout -->
-                    <TextView
-                        android:id="@+id/tvLocationLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Location"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp"/>
 
-                    <TextView
-                        android:id="@+id/tvLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Location not set"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnUpdateLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Update Location"
-                        android:layout_marginTop="8dp"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
@@ -192,7 +168,49 @@
                         android:layout_marginTop="-9dp"
                         android:layout_marginBottom="8dp"/>
 
-                    <!-- Game Stats Indicators -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Местоположение"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvLocation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Местоположението не е зададено"
+                                android:textSize="14sp"
+                                android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnUpdateLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Актуализация"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -203,13 +221,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Game Stats"
+                            android:text="Статистика на играта"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
                     </LinearLayout>
 
-                    <!-- Points -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -226,7 +243,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Points: "
+                            android:text="Точки: "
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:layout_marginStart="8dp"/>
@@ -247,7 +264,6 @@
                         android:background="@color/black"
                         android:layout_marginBottom="8dp"/>
 
-                    <!-- Money -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -264,7 +280,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Money: "
+                            android:text="Пари: "
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:layout_marginStart="8dp"/>
@@ -285,7 +301,6 @@
                         android:background="@color/black"
                         android:layout_marginBottom="8dp"/>
 
-                    <!-- High Score -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -302,7 +317,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="High Score: "
+                            android:text="Най-висок резултат в игра: "
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:layout_marginStart="8dp"/>
@@ -333,11 +348,12 @@
 
                         <Button
                             android:id="@+id/btUpdateProfile"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="70dp"
+                            android:layout_weight="1"
                             android:backgroundTint="@color/purple_700"
-                            android:layout_marginEnd="10dp"
-                            android:text="Update Profile"
+                            android:layout_marginEnd="5dp"
+                            android:text="Актуализиране"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:textColor="@color/white"
@@ -345,11 +361,12 @@
 
                         <Button
                             android:id="@+id/btDeleteProfile"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="70dp"
-                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="5dp"
                             android:backgroundTint="@color/red"
-                            android:text="Delete Account"
+                            android:text="Изтриване"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:textStyle="bold"

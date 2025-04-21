@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:textSize="16sp"
             android:textColor="#FFFFFF"
-            android:text="Team 1: 0 points"
+            android:text="Отбор 1: 0 точки"
             android:textStyle="bold"/>
 
         <TextView
@@ -41,7 +41,7 @@
             android:textSize="16sp"
             android:textColor="#FFFFFF"
             android:gravity="end"
-            android:text="Team 2: 0 points"
+            android:text="Отбор 2: 0 точки"
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -54,7 +54,7 @@
         android:textColor="#FFFFFF"
         android:gravity="center"
         android:padding="4dp"
-        android:text="Current player: You"
+        android:text="Текущ играч: Ти"
         app:layout_constraintTop_toBottomOf="@id/scoresLayout"/>
 
     <!-- Player 3 Position (Top/Partner) -->
@@ -68,7 +68,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:contentDescription="Partner's card"/>
+        android:contentDescription="Карта на партньор"/>
 
     <!-- Player 2 Position (Left) -->
     <ImageView
@@ -81,7 +81,7 @@
         app:layout_constraintTop_toTopOf="@id/tableCenterGuide"
         app:layout_constraintBottom_toBottomOf="@id/tableCenterGuide"
         android:layout_marginStart="16dp"
-        android:contentDescription="Left player's card"/>
+        android:contentDescription="Карта на играча отляво"/>
 
     <!-- Player 4 Position (Right) -->
     <ImageView
@@ -94,7 +94,7 @@
         app:layout_constraintTop_toTopOf="@id/tableCenterGuide"
         app:layout_constraintBottom_toBottomOf="@id/tableCenterGuide"
         android:layout_marginEnd="16dp"
-        android:contentDescription="Right player's card"/>
+        android:contentDescription="Карта на играча отдясно"/>
 
     <!-- Center guide for table alignment -->
     <androidx.constraintlayout.widget.Guideline
@@ -109,7 +109,7 @@
         android:id="@+id/tableCardsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Table Cards:"
+        android:text="Карти на масата:"
         android:textSize="16sp"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/player3CardView"
@@ -159,7 +159,7 @@
                 android:id="@+id/logLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Game Log:"
+                android:text="Данни за играта: "
                 android:textSize="16sp"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"/>
@@ -185,7 +185,7 @@
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next Turn"
+        android:text="Следващ Ред"
         android:backgroundTint="#008800"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -198,7 +198,7 @@
         android:id="@+id/yourHandLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Hand:"
+        android:text="Твоята ръка:"
         android:textSize="16sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
@@ -250,7 +250,7 @@
             android:id="@+id/playedCardImage"
             android:layout_width="match_parent"
             android:layout_height="144dp"
-            android:contentDescription="Played card"
+            android:contentDescription="Изиграна карта"
             android:scaleType="fitCenter" />
     </FrameLayout>
 
@@ -259,7 +259,7 @@
         android:id="@+id/pastraText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PASTRA!"
+        android:text="ПАСТРА!"
         android:textSize="36sp"
         android:textColor="#FFD700"
         android:textStyle="bold"

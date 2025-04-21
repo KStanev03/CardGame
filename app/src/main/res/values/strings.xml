@@ -9,7 +9,6 @@
     <string name="invalid_username">Невалидно потребителско име</string>
     <string name="invalid_password">Паролата трябва да е над 5 символа</string>
     <string name="login_failed">Входът е неуспешен</string>
-    <string name="my_map_api_key">AIzaSyA5MuL3YX5vAtpCXnA5XrEYoffb2MyV-yc</string>
     <string-array name="gender_options">
         <item>Мъж</item>
         <item>Жена</item>
