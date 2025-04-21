@@ -97,14 +97,15 @@ class GameActivity : AppCompatActivity() {
                 val user = db.userDAO().findByUsername(username)
                 if (user != null) {
                     currentUserId = user.uid
+                    // First load the deck prefix
                     loadActiveDeckPrefix()
+                    // THEN setup the game after the prefix has been loaded
+                    setupGame()
+                } else {
+                    // Fallback for when no user is found
+                    setupGame()
                 }
-                // Set up game after getting user ID
-                setupGame()
             }
-        } else {
-            // Fallback if no user logged in - dev/testing mode
-            setupGame()
         }
 
         // Set up new game button (previously next button)
@@ -121,7 +122,6 @@ class GameActivity : AppCompatActivity() {
         // Reset game end flag
         gameEndHandled = false
 
-        loadActiveDeckPrefix()
 
         // Add players (0 is human, others are AI)
         game.addPlayer("You", 0, true)
@@ -476,19 +476,17 @@ class GameActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun loadActiveDeckPrefix() {
+    private suspend fun loadActiveDeckPrefix() {
         if (currentUserId != -1) {
-            lifecycleScope.launch {
-                try {
-                    // Get active deck prefix
-                    activeResourcePrefix = deckManager.getActiveResourcePrefix(currentUserId)
-                    // Log the loaded prefix for debugging
-                    println("Loaded active resource prefix: $activeResourcePrefix")
-                } catch (e: Exception) {
-                    // Fallback to default prefix
-                    println("Error loading active deck: ${e.message}")
-                    activeResourcePrefix = "card_"
-                }
+            try {
+                // Get active deck prefix - using suspend function directly
+                activeResourcePrefix = deckManager.getActiveResourcePrefix(currentUserId)
+                // Log the loaded prefix for debugging
+                println("Loaded active resource prefix: $activeResourcePrefix")
+            } catch (e: Exception) {
+                // Fallback to default prefix
+                println("Error loading active deck: ${e.message}")
+                activeResourcePrefix = "card_"
             }
         } else {
             // Default for dev/testing
