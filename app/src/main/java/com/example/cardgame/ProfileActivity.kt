@@ -28,8 +28,8 @@ import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.cardgame.location.LocationHelper
-import com.example.cardgame.location.LocationResult
+import com.example.cardgame.LocationHelper
+import com.example.cardgame.LocationResult
 import com.google.android.material.button.MaterialButton
 
 class Profile : AppCompatActivity() {

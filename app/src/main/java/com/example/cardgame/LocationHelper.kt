@@ -1,4 +1,4 @@
-package com.example.cardgame.location
+package com.example.cardgame
 
 import android.Manifest
 import android.content.Context
