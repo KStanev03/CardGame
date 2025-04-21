@@ -22,12 +22,25 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+// Add these imports to ProfileActivity.kt
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.cardgame.location.LocationHelper
+import com.example.cardgame.location.LocationResult
+import com.google.android.material.button.MaterialButton
 
 class Profile : AppCompatActivity() {
     private lateinit var userInfoDAO: UserInfoDAO
     private lateinit var userDAO: UserDAO
     private var userId: Int = -1
     private lateinit var profileImageView: CircleImageView
+
+    private lateinit var locationTextView: TextView
+    private lateinit var updateLocationButton: MaterialButton
+    private lateinit var locationHelper: LocationHelper
 
     // UI elements
     private lateinit var emailEditText: EditText
@@ -92,6 +105,13 @@ class Profile : AppCompatActivity() {
         deleteButton.setOnClickListener {
             showDeleteConfirmationDialog()
         }
+        locationTextView = findViewById(R.id.tvLocation) // You'll need to add this to the layout
+        updateLocationButton = findViewById(R.id.btnUpdateLocation) // You'll need to add this to the layout
+        locationHelper = LocationHelper(this)
+
+        updateLocationButton.setOnClickListener {
+            requestLocationPermissions()
+        }
     }
 
     private suspend fun loadUserData() {
@@ -109,6 +129,7 @@ class Profile : AppCompatActivity() {
                 pointsTextView.text = it.points.toString()
                 moneyTextView.text = it.money.toString()
                 highScoreTextView.text = it.highScore.toString()
+                locationTextView.text = it.location ?: "Location not set"
 
                 // Load avatar
                 try {
@@ -221,7 +242,8 @@ class Profile : AppCompatActivity() {
                     avatar = it.avatar,
                     points = it.points,
                     money = it.money,
-                    highScore = it.highScore
+                    highScore = it.highScore,
+                    location = it.location
                 )
                 userInfoDAO.update(updatedInfo)
             }
@@ -258,6 +280,110 @@ class Profile : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
             finish()
+        }
+    }
+
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
+                    permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                // Permissions granted, get location
+                lifecycleScope.launch {
+                    updateLocationDisplay()
+                }
+            }
+            else -> {
+                // Permissions denied
+                Toast.makeText(
+                    this@Profile,
+                    "Location permissions are required to update your location",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun requestLocationPermissions() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // Permission already granted
+                lifecycleScope.launch {
+                    updateLocationDisplay()
+                }
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                // Show explanation to user about why location is needed
+                Toast.makeText(
+                    this,
+                    "Location permission is needed to show your current city/country",
+                    Toast.LENGTH_LONG
+                ).show()
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            }
+            else -> {
+                // Request permission
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            }
+        }
+    }
+
+    private suspend fun updateLocationDisplay() {
+        val locationResult = locationHelper.getCurrentLocation()
+
+        withContext(Dispatchers.Main) {
+            when (locationResult) {
+                is LocationResult.Success -> {
+                    locationTextView.text = locationResult.locationName
+                    // Update the database with the new location
+                    updateUserLocation(locationResult.locationName)
+                }
+                is LocationResult.Error -> {
+                    Toast.makeText(
+                        this@Profile,
+                        "Error getting location: ${locationResult.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is LocationResult.PermissionRequired -> {
+                    requestLocationPermissions()
+                }
+            }
+        }
+    }
+
+    private suspend fun updateUserLocation(location: String) {
+        withContext(Dispatchers.IO) {
+            // Get current user info
+            val userInfo = userInfoDAO.getUserInfoByUserId(userId)
+
+            userInfo?.let {
+                val updatedInfo = UserInfo(
+                    profileId = it.profileId,
+                    userId = it.userId,
+                    displayName = it.displayName,
+                    avatar = it.avatar,
+                    points = it.points,
+                    money = it.money,
+                    highScore = it.highScore,
+                    location = location
+                )
+                userInfoDAO.update(updatedInfo)
+            }
         }
     }
 }
