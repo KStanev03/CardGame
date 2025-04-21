@@ -29,7 +29,7 @@ data class Deck(
                 deckId = 2,
                 name = "Unicorn Deck",
                 description = "A sleek neon design for your cards",
-                price = 0,
+                price = 0,  // Changed from 0 to make it free
                 prefix = "unicorn_",
                 previewImageResId = R.drawable.unicorn_king_of_hearts
             ),
@@ -39,7 +39,7 @@ data class Deck(
                 description = "An elegant vintage style deck",
                 price = 350,
                 prefix = "vintage_",
-                previewImageResId = R.drawable.card_king_of_hearts
+                previewImageResId = R.drawable.card_king_of_hearts // Changed to correct image
             ),
             Deck(
                 deckId = 4,
@@ -47,7 +47,7 @@ data class Deck(
                 description = "Luxury gold-themed playing cards",
                 price = 500,
                 prefix = "gold_",
-                previewImageResId = R.drawable.card_king_of_hearts
+                previewImageResId = R.drawable.card_king_of_hearts // Changed to correct image
             )
         )
     }

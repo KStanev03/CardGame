@@ -1,5 +1,6 @@
 package com.example.cardgame
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -30,6 +31,7 @@ class ShopActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.deckRecyclerView)
         coinBalanceTextView = findViewById(R.id.tvShopCoins)
         val backButton = findViewById<Button>(R.id.backButton)
+        val myDecksButton = findViewById<Button>(R.id.myDecksButton)
 
         // Get user ID from intent
         userId = intent.getIntExtra("USER_ID", -1)
@@ -54,6 +56,13 @@ class ShopActivity : AppCompatActivity() {
         // Back button click listener
         backButton.setOnClickListener {
             finish()
+        }
+
+        // My Decks button click listener
+        myDecksButton.setOnClickListener {
+            val intent = Intent(this, DeckSelectionActivity::class.java)
+            intent.putExtra("USER_ID", userId)
+            startActivity(intent)
         }
     }
 
@@ -90,8 +99,15 @@ class ShopActivity : AppCompatActivity() {
                     deckManager.getUserDecks(userId)
                 }
 
-                // Set up adapter
-                val adapter = DeckShopAdapter(allDecks, userDecks) { deck ->
+                // Ensure default decks are added to user's collection
+                ensureDefaultDecksOwned(allDecks, userDecks)
+
+                // Set up adapter with refreshed user decks
+                val refreshedUserDecks = withContext(Dispatchers.IO) {
+                    deckManager.getUserDecks(userId)
+                }
+
+                val adapter = DeckShopAdapter(allDecks, refreshedUserDecks) { deck ->
                     purchaseDeck(deck)
                 }
                 recyclerView.adapter = adapter
@@ -101,6 +117,31 @@ class ShopActivity : AppCompatActivity() {
                     "Error loading decks: ${e.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
+
+    private suspend fun ensureDefaultDecksOwned(allDecks: List<Deck>, userDecks: List<Deck>) {
+        // Find all free (price = 0) decks
+        val freeDecks = allDecks.filter { it.price == 0 }
+
+        // Add any free decks that user doesn't already own
+        for (freeDeck in freeDecks) {
+            if (userDecks.none { it.deckId == freeDeck.deckId }) {
+                withContext(Dispatchers.IO) {
+                    deckManager.addDeckToUser(userId, freeDeck.deckId)
+                }
+            }
+        }
+
+        // If user has no active deck, set the first free deck as active
+        val activeDeck = withContext(Dispatchers.IO) {
+            deckManager.getActiveDeck(userId)
+        }
+
+        if (activeDeck == null && freeDecks.isNotEmpty()) {
+            withContext(Dispatchers.IO) {
+                deckManager.setActiveDeck(userId, freeDecks.first().deckId)
             }
         }
     }

@@ -97,6 +97,7 @@ class GameActivity : AppCompatActivity() {
                 val user = db.userDAO().findByUsername(username)
                 if (user != null) {
                     currentUserId = user.uid
+                    loadActiveDeckPrefix()
                 }
                 // Set up game after getting user ID
                 setupGame()
@@ -479,14 +480,19 @@ class GameActivity : AppCompatActivity() {
         if (currentUserId != -1) {
             lifecycleScope.launch {
                 try {
-                    activeResourcePrefix = withContext(Dispatchers.IO) {
-                        deckManager.getActiveResourcePrefix(currentUserId)
-                    }
+                    // Get active deck prefix
+                    activeResourcePrefix = deckManager.getActiveResourcePrefix(currentUserId)
+                    // Log the loaded prefix for debugging
+                    println("Loaded active resource prefix: $activeResourcePrefix")
                 } catch (e: Exception) {
                     // Fallback to default prefix
+                    println("Error loading active deck: ${e.message}")
                     activeResourcePrefix = "card_"
                 }
             }
+        } else {
+            // Default for dev/testing
+            activeResourcePrefix = "card_"
         }
     }
 }

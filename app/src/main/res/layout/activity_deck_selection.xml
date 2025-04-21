@@ -6,46 +6,29 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/shopTitle"
+        android:id="@+id/tvDeckSelectionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Card Deck Shop"
+        android:text="Your Decks"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvShopCoins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 coins"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/backButtonDeckSelection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shopTitle" />
-
-    <Button
-        android:id="@+id/myDecksButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My Decks"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvShopCoins" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/deckRecyclerView"
+        android:id="@+id/deckSelectionRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDeckSelectionTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
