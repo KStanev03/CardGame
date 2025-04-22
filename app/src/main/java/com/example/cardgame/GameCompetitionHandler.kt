@@ -71,6 +71,21 @@ class GameCompletionHandler(private val context: Context) {
     }
 
     /**
+     * Only update achievements without recording game history
+     */
+    fun updateAchievementsOnly(
+        userId: Int,
+        isPlayerWinner: Boolean,
+        playerScore: Int
+    ) {
+        // Determine outcome
+        val outcome = if (isPlayerWinner) "WIN" else "LOSS"
+
+        // Update achievements
+       // achievementManager.updateAchievements(userId, outcome, playerScore)
+    }
+
+    /**
      * Initialize achievements for a new user
      */
     fun initializeAchievements(userId: Int, coroutineScope: CoroutineScope) {

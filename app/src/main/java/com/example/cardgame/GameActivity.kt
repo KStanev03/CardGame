@@ -20,7 +20,7 @@ import com.example.cardgame.adapters.CardAdapter
 import com.example.cardgame.datamanager.LoggedUser
 import com.example.cardgame.datamanager.AppDatabase
 import com.example.cardgame.GameCompletionHandler
-import com.example.cardgame.services.GameService
+import com.example.cardgame.services.GameCompletionService
 import kotlinx.coroutines.launch
 import com.example.cardgame.datamanager.deck.DeckManager
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var gameLogTextView: TextView
     private lateinit var playCardView: FrameLayout
     private lateinit var newGameButton: Button
-    private lateinit var gameService: GameService
+    private lateinit var gameCompletionService: GameCompletionService
 
     private var gameEndHandled = false
 
@@ -85,7 +85,7 @@ class GameActivity : AppCompatActivity() {
         playCardView.visibility = View.INVISIBLE
 
         // Initialize the Game Service
-        gameService = GameService(this)
+        gameCompletionService = GameCompletionService(this)
 
         deckManager = DeckManager(this)
         // Get current user ID from logged in user
@@ -152,7 +152,7 @@ class GameActivity : AppCompatActivity() {
         // Update scores
         val scores = game.getTeamScores()
         team1ScoreTextView.text = "Отбор 1: ${scores[0]} точки"
-        team2ScoreTextView.text = "Отбот 2: ${scores[1]} точки"
+        team2ScoreTextView.text = "Отбор 2: ${scores[1]} точки"
 
         // Update table cards
         val tableCards = game.getTableCards()
@@ -444,47 +444,37 @@ class GameActivity : AppCompatActivity() {
             val aiScore = scores[1] ?: 0
 
             // Use GameService to save results and handle rewards
-            lifecycleScope.launch {
-                gameService.saveGameResults(
-                    userId,
-                    isPlayerWinner,
-                    "$playerScore-$aiScore",
-                    playerScore
-                )
-            }
-
-            // Also handle achievements via the completion handler
-            val gameCompletionHandler = GameCompletionHandler(this)
-            gameCompletionHandler.handleGameCompletion(
+            gameCompletionService.handleGameCompletion(
                 userId,
                 isPlayerWinner,
                 playerScore,
                 aiScore,
                 lifecycleScope
             )
-        }
 
-        // Show new game button
-        newGameButton.visibility = View.VISIBLE
+            // Show new game button
+            newGameButton.visibility = View.VISIBLE
+        }
     }
 
-    private fun showGameEndDialog(resultMessage: String, rewardsMessage: String) {
-        val fullMessage = if (rewardsMessage.isNotEmpty()) {
-            "$resultMessage\n\n$rewardsMessage"
-        } else {
-            resultMessage
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle("Game Over")
-            .setMessage(fullMessage)
-            .setPositiveButton("OK") { _, _ ->
-                // Show new game button
-                newGameButton.visibility = View.VISIBLE
+        private fun showGameEndDialog(resultMessage: String, rewardsMessage: String) {
+            val fullMessage = if (rewardsMessage.isNotEmpty()) {
+                "$resultMessage\n\n$rewardsMessage"
+            } else {
+                resultMessage
             }
-            .setCancelable(false)
-            .show()
-    }
+
+            AlertDialog.Builder(this)
+                .setTitle("Game Over")
+                .setMessage(fullMessage)
+                .setPositiveButton("OK") { _, _ ->
+                    // Show new game button
+                    newGameButton.visibility = View.VISIBLE
+                }
+                .setCancelable(false)
+                .show()
+
+        }
 
     private suspend fun loadActiveDeckPrefix() {
         if (currentUserId != -1) {

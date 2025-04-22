@@ -1,6 +1,7 @@
 package com.example.cardgame.datamanager.achievement
 
 import android.content.Context
+import android.util.Log
 import com.example.cardgame.datamanager.AppDatabase
 import com.example.cardgame.datamanager.history.GameHistoryDAO
 import com.example.cardgame.datamanager.user.UserInfoDAO
@@ -11,7 +12,7 @@ import kotlinx.coroutines.withContext
  * Управлява постиженията за потребителите в играта на карти.
  */
 class AchievementManager(private val context: Context) {
-
+    private val TAG = "AchievementManager"
     private val db = AppDatabase.getInstance(context)
     private val achievementDAO = db.achievementDAO()
     private val gameHistoryDAO = db.gameHistoryDAO()
@@ -21,6 +22,13 @@ class AchievementManager(private val context: Context) {
      * Инициализира постиженията за нов потребител.
      */
     suspend fun initializeAchievementsForUser(userId: Int) {
+        // Check if user already has achievements
+        val existingAchievements = getUserAchievements(userId)
+        if (existingAchievements.isNotEmpty()) {
+            Log.d(TAG, "User $userId already has ${existingAchievements.size} achievements. Skipping initialization.")
+            return
+        }
+
         // Постижения за брой победи
         val winAchievements = listOf(
             Achievement(userId = userId, goalName = "Новак", targetValue = 5, currentValue = 0),
@@ -49,6 +57,7 @@ class AchievementManager(private val context: Context) {
             for (achievement in winAchievements + pointsAchievements + gameAchievements) {
                 achievementDAO.insertAchievement(achievement)
             }
+            Log.d(TAG, "Initialized ${winAchievements.size + pointsAchievements.size + gameAchievements.size} achievements for user $userId")
         }
     }
 
@@ -57,6 +66,8 @@ class AchievementManager(private val context: Context) {
      */
     suspend fun updateAchievements(userId: Int, outcome: String, score: Int) {
         withContext(Dispatchers.IO) {
+            Log.d(TAG, "Updating achievements for user $userId, outcome: $outcome, score: $score")
+
             // Актуализиране на постиженията за победи, ако потребителят е спечелил
             if (outcome == "WIN") {
                 updateWinAchievements(userId)
@@ -67,6 +78,11 @@ class AchievementManager(private val context: Context) {
 
             // Актуализиране на постиженията за брой изиграни игри (независимо от резултата)
             updateGameCountAchievements(userId)
+
+            // Log status after update
+            val allAchievements = getUserAchievements(userId)
+            val completedCount = allAchievements.count { it.isCompleted }
+            Log.d(TAG, "After update: $completedCount/${allAchievements.size} achievements completed")
         }
     }
 
@@ -74,28 +90,37 @@ class AchievementManager(private val context: Context) {
      * Актуализира постиженията, свързани с победи.
      */
     private suspend fun updateWinAchievements(userId: Int) {
-        // Вземане на общия брой победи
+        // Get total wins
         val totalWins = gameHistoryDAO.getGameCountForUserByOutcome(userId, "WIN")
+        Log.d(TAG, "User $userId has $totalWins total wins")
 
-        // Вземане на всички постижения за победи
+        // Get all win achievements
         val winAchievements = achievementDAO.getAchievementsForUser(userId).filter {
-            it.goalName.contains("Победител") || it.goalName.contains("Майстор") ||
-                    it.goalName.contains("Шампион") || it.goalName.contains("Играч")
+            it.goalName.contains("Новак") || it.goalName.contains("Опитен Играч") ||
+                    it.goalName.contains("Пастра Майстор") || it.goalName.contains("Пастра Шампион")
         }
 
-        // Актуализиране на напредъка на всяко постижение
+        // Update each achievement
         for (achievement in winAchievements) {
-            if (!achievement.isCompleted && achievement.targetValue <= totalWins) {
-                achievementDAO.updateAchievement(
-                    achievement.copy(
-                        currentValue = totalWins,
-                        isCompleted = true
-                    )
+            // Important: NEVER modify completed achievements
+            if (achievement.isCompleted) {
+                Log.d(TAG, "Skipping completed achievement: ${achievement.goalName}")
+                continue
+            }
+
+            if (achievement.targetValue <= totalWins) {
+                // Mark as completed
+                val updatedAchievement = achievement.copy(
+                    currentValue = totalWins,
+                    isCompleted = true
                 )
-            } else if (!achievement.isCompleted) {
-                achievementDAO.updateAchievement(
-                    achievement.copy(currentValue = totalWins)
-                )
+                achievementDAO.updateAchievement(updatedAchievement)
+                Log.d(TAG, "Achievement completed: ${achievement.goalName}")
+            } else {
+                // Just update progress
+                val updatedAchievement = achievement.copy(currentValue = totalWins)
+                achievementDAO.updateAchievement(updatedAchievement)
+                Log.d(TAG, "Achievement updated: ${achievement.goalName}, progress: ${achievement.currentValue}/${achievement.targetValue}")
             }
         }
     }
@@ -104,28 +129,37 @@ class AchievementManager(private val context: Context) {
      * Актуализира постиженията, свързани с точки.
      */
     private suspend fun updatePointsAchievements(userId: Int, gamePoints: Int) {
-        // Вземане на информация за потребителя, за да се вземат текущите общи точки
+        // Get user info for total points
         val userInfo = userInfoDAO.getUserInfoByUserId(userId)
         val totalPoints = userInfo?.points ?: 0
+        Log.d(TAG, "User $userId has $totalPoints total points")
 
-        // Вземане на всички постижения за точки
+        // Get all points achievements
         val pointsAchievements = achievementDAO.getAchievementsForUser(userId).filter {
             it.goalName.contains("Точки")
         }
 
-        // Актуализиране на напредъка на всяко постижение
+        // Update each achievement
         for (achievement in pointsAchievements) {
-            if (!achievement.isCompleted && achievement.targetValue <= totalPoints) {
-                achievementDAO.updateAchievement(
-                    achievement.copy(
-                        currentValue = totalPoints,
-                        isCompleted = true
-                    )
+            // Important: NEVER modify completed achievements
+            if (achievement.isCompleted) {
+                Log.d(TAG, "Skipping completed achievement: ${achievement.goalName}")
+                continue
+            }
+
+            if (achievement.targetValue <= totalPoints) {
+                // Mark as completed
+                val updatedAchievement = achievement.copy(
+                    currentValue = totalPoints,
+                    isCompleted = true
                 )
-            } else if (!achievement.isCompleted) {
-                achievementDAO.updateAchievement(
-                    achievement.copy(currentValue = totalPoints)
-                )
+                achievementDAO.updateAchievement(updatedAchievement)
+                Log.d(TAG, "Achievement completed: ${achievement.goalName}")
+            } else {
+                // Just update progress
+                val updatedAchievement = achievement.copy(currentValue = totalPoints)
+                achievementDAO.updateAchievement(updatedAchievement)
+                Log.d(TAG, "Achievement updated: ${achievement.goalName}, progress: ${achievement.currentValue}/${achievement.targetValue}")
             }
         }
     }
@@ -134,30 +168,39 @@ class AchievementManager(private val context: Context) {
      * Актуализира постиженията за брой изиграни игри.
      */
     private suspend fun updateGameCountAchievements(userId: Int) {
-        // Вземане на общия брой изиграни игри (ПОБЕДИ + ЗАГУБИ)
+        // Get total games (wins + losses)
         val totalWins = gameHistoryDAO.getGameCountForUserByOutcome(userId, "WIN")
         val totalLosses = gameHistoryDAO.getGameCountForUserByOutcome(userId, "LOSS")
         val totalGames = totalWins + totalLosses
+        Log.d(TAG, "User $userId has played $totalGames total games")
 
-        // Вземане на всички постижения за брой изиграни игри
+        // Get all game count achievements
         val gameCountAchievements = achievementDAO.getAchievementsForUser(userId).filter {
             it.goalName.contains("Ентусиаст") || it.goalName.contains("Зависим") ||
                     it.goalName.contains("Ветеран")
         }
 
-        // Актуализиране на напредъка на всяко постижение
+        // Update each achievement
         for (achievement in gameCountAchievements) {
-            if (!achievement.isCompleted && achievement.targetValue <= totalGames) {
-                achievementDAO.updateAchievement(
-                    achievement.copy(
-                        currentValue = totalGames,
-                        isCompleted = true
-                    )
+            // Important: NEVER modify completed achievements
+            if (achievement.isCompleted) {
+                Log.d(TAG, "Skipping completed achievement: ${achievement.goalName}")
+                continue
+            }
+
+            if (achievement.targetValue <= totalGames) {
+                // Mark as completed
+                val updatedAchievement = achievement.copy(
+                    currentValue = totalGames,
+                    isCompleted = true
                 )
-            } else if (!achievement.isCompleted) {
-                achievementDAO.updateAchievement(
-                    achievement.copy(currentValue = totalGames)
-                )
+                achievementDAO.updateAchievement(updatedAchievement)
+                Log.d(TAG, "Achievement completed: ${achievement.goalName}")
+            } else {
+                // Just update progress
+                val updatedAchievement = achievement.copy(currentValue = totalGames)
+                achievementDAO.updateAchievement(updatedAchievement)
+                Log.d(TAG, "Achievement updated: ${achievement.goalName}, progress: ${achievement.currentValue}/${achievement.targetValue}")
             }
         }
     }
@@ -167,7 +210,9 @@ class AchievementManager(private val context: Context) {
      */
     suspend fun getUserAchievements(userId: Int): List<Achievement> {
         return withContext(Dispatchers.IO) {
-            achievementDAO.getAchievementsForUser(userId)
+            val achievements = achievementDAO.getAchievementsForUser(userId)
+            Log.d(TAG, "Retrieved ${achievements.size} achievements for user $userId")
+            achievements
         }
     }
 
@@ -176,7 +221,12 @@ class AchievementManager(private val context: Context) {
      */
     suspend fun getCompletedAchievements(userId: Int): List<Achievement> {
         return withContext(Dispatchers.IO) {
-            achievementDAO.getAchievementsForUser(userId).filter { it.isCompleted }
+            val completed = achievementDAO.getAchievementsForUser(userId).filter { it.isCompleted }
+            Log.d(TAG, "Retrieved ${completed.size} completed achievements for user $userId")
+            completed.forEach {
+                Log.d(TAG, "Completed achievement: ${it.goalName}")
+            }
+            completed
         }
     }
 
@@ -185,7 +235,9 @@ class AchievementManager(private val context: Context) {
      */
     suspend fun getInProgressAchievements(userId: Int): List<Achievement> {
         return withContext(Dispatchers.IO) {
-            achievementDAO.getAchievementsForUser(userId).filter { !it.isCompleted }
+            val inProgress = achievementDAO.getAchievementsForUser(userId).filter { !it.isCompleted }
+            Log.d(TAG, "Retrieved ${inProgress.size} in-progress achievements for user $userId")
+            inProgress
         }
     }
 }

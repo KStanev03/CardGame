@@ -1,5 +1,6 @@
 package com.example.cardgame.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,14 @@ class AchievementAdapter(
     private val achievements: List<Achievement>,
     private val isCompleted: Boolean
 ) : RecyclerView.Adapter<AchievementAdapter.AchievementViewHolder>() {
+    private val TAG = "AchievementAdapter"
+
+    init {
+        Log.d(TAG, "Creating adapter with ${achievements.size} achievements, isCompleted=$isCompleted")
+        achievements.forEach {
+            Log.d(TAG, "Achievement: ${it.goalName}, completed=${it.isCompleted}, progress=${it.currentValue}/${it.targetValue}")
+        }
+    }
 
     class AchievementViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.achievementTitleTextView)
@@ -29,11 +38,12 @@ class AchievementAdapter(
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         val achievement = achievements[position]
+        Log.d(TAG, "Binding achievement: ${achievement.goalName}, completed=${achievement.isCompleted}")
 
-        // Задаване на заглавие на постижението
+        // Set achievement title
         holder.titleTextView.text = achievement.goalName
 
-        // Задаване на описание на постижението според типа
+        // Set achievement description based on type
         val description = when {
             achievement.goalName.contains("Новак") ||
                     achievement.goalName.contains("Опитен Играч") ||
@@ -53,17 +63,20 @@ class AchievementAdapter(
         }
         holder.descriptionTextView.text = description
 
-        // Задаване на прогрес
-        val progress = (achievement.currentValue * 100) / achievement.targetValue
+        // Set progress
+        val progress = if (achievement.targetValue > 0) {
+            (achievement.currentValue * 100) / achievement.targetValue
+        } else {
+            0
+        }
         holder.progressBar.progress = progress.coerceAtMost(100)
 
-        // Задаване на текст за прогрес
-        holder.progressTextView.text = "${achievement.currentValue}/${achievement.targetValue}"
-
-        // Ако е завършено, задаване на прогрес бара в завършено състояние
-        if (isCompleted) {
+        // Set progress text
+        if (achievement.isCompleted || isCompleted) {
             holder.progressBar.progress = 100
             holder.progressTextView.text = "Завършено!"
+        } else {
+            holder.progressTextView.text = "${achievement.currentValue}/${achievement.targetValue}"
         }
     }
 

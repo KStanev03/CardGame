@@ -2,62 +2,84 @@ package com.example.cardgame.services
 
 import android.content.Context
 import com.example.cardgame.datamanager.AppDatabase
+import com.example.cardgame.datamanager.achievement.AchievementManager
 import com.example.cardgame.datamanager.history.GameHistory
-import com.example.cardgame.datamanager.user.UserInfoDAO
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * Handles game-related database operations including recording history and updating user stats
+ * Unified service that handles all game completion tasks:
+ * - Recording game history
+ * - Updating user stats (points, money, high score)
+ * - Processing achievements
  */
-class GameService(private val context: Context) {
+class GameCompletionService(private val context: Context) {
+
     private val db = AppDatabase.getInstance(context)
-    private val userInfoDAO: UserInfoDAO = db.userInfoDAO()
     private val gameHistoryDAO = db.gameHistoryDAO()
+    private val userInfoDAO = db.userInfoDAO()
+    private val achievementManager = AchievementManager(context)
 
     /**
-     * Records game outcome and updates player stats
+     * Handles all aspects of game completion in a single unified flow
      *
      * @param userId The ID of the user
-     * @param isWin Whether the user won the game
-     * @param score The final score (team vs team)
-     * @param pointsEarned Points earned by user's team
-     * @param moneyEarned Money earned (calculated based on points and win status)
+     * @param isPlayerWinner Whether the user won the game
+     * @param playerScore Points earned by user's team
+     * @param aiScore Points earned by AI team
+     * @param coroutineScope Coroutine scope for launching async operations
      */
-    suspend fun saveGameResults(
+    fun handleGameCompletion(
         userId: Int,
-        isWin: Boolean,
-        score: String,
-        pointsEarned: Int,
-        moneyEarned: Int = calculateMoneyReward(isWin, pointsEarned)
-    ) = withContext(Dispatchers.IO) {
-        // 1. Update the user's points and money
-        val userInfo = userInfoDAO.getUserInfoByUserId(userId)
+        isPlayerWinner: Boolean,
+        playerScore: Int,
+        aiScore: Int,
+        coroutineScope: CoroutineScope
+    ) {
+        coroutineScope.launch {
+            // Determine outcome
+            val outcome = if (isPlayerWinner) "WIN" else "LOSS"
 
-        userInfo?.let {
-            // Update points
-            val newPoints = it.points + pointsEarned
-            userInfoDAO.updateUserPoints(userId, newPoints)
+            // Create score string
+            val scoreString = "$playerScore-$aiScore"
 
-            // Update money
-            val newMoney = it.money + moneyEarned
-            userInfoDAO.updateUserMoney(userId, newMoney)
+            withContext(Dispatchers.IO) {
+                // 1. Record game history - only once
+                val gameHistory = GameHistory(
+                    userId = userId,
+                    outcome = outcome,
+                    opponent = "AI",
+                    score = scoreString
+                )
 
-            // Update high score if current score is higher
-            if (pointsEarned > it.highScore) {
-                userInfoDAO.updateUserHighScore(userId, pointsEarned)
+                gameHistoryDAO.insert(gameHistory)
+
+                // 2. Update user stats
+                val userInfo = userInfoDAO.getUserInfoByUserId(userId)
+                userInfo?.let {
+                    // Calculate money reward
+                    val moneyEarned = calculateMoneyReward(isPlayerWinner, playerScore)
+
+                    // Update points
+                    val newPoints = it.points + playerScore
+                    userInfoDAO.updateUserPoints(userId, newPoints)
+
+                    // Update money
+                    val newMoney = it.money + moneyEarned
+                    userInfoDAO.updateUserMoney(userId, newMoney)
+
+                    // Update high score if needed
+                    if (playerScore > it.highScore) {
+                        userInfoDAO.updateUserHighScore(userId, playerScore)
+                    }
+
+                    // 3. Process achievements
+                    achievementManager.updateAchievements(userId, outcome, playerScore)
+                }
             }
         }
-
-        // 2. Record the game in history
-        val gameHistory = GameHistory(
-            userId = userId,
-            outcome = if (isWin) "WIN" else "LOSS",
-            opponent = "AI",
-            score = score
-        )
-
-        gameHistoryDAO.insert(gameHistory)
     }
 
     /**
@@ -71,5 +93,14 @@ class GameService(private val context: Context) {
         val pointsBonus = points / 2
 
         return baseReward + pointsBonus
+    }
+
+    /**
+     * Initialize achievements for a new user
+     */
+    fun initializeAchievements(userId: Int, coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            achievementManager.initializeAchievementsForUser(userId)
+        }
     }
 }

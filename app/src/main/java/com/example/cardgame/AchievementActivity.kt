@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cardgame.R
 import com.example.cardgame.adapters.AchievementAdapter
 import com.example.cardgame.datamanager.achievement.Achievement
 import com.example.cardgame.datamanager.achievement.AchievementManager
@@ -55,6 +54,13 @@ class AchievementActivity : AppCompatActivity() {
         lifecycleScope.launch {
             // Get completed achievements
             val completedAchievements = achievementManager.getCompletedAchievements(userId)
+
+            // Log for debugging
+            println("Debug: Found ${completedAchievements.size} completed achievements")
+            completedAchievements.forEach {
+                println("Debug: Completed achievement: ${it.goalName}, isCompleted=${it.isCompleted}")
+            }
+
             if (completedAchievements.isEmpty()) {
                 noCompletedText.visibility = View.VISIBLE
                 completedRecyclerView.visibility = View.GONE
@@ -66,6 +72,10 @@ class AchievementActivity : AppCompatActivity() {
 
             // Get in-progress achievements
             val inProgressAchievements = achievementManager.getInProgressAchievements(userId)
+
+            // Log for debugging
+            println("Debug: Found ${inProgressAchievements.size} in-progress achievements")
+
             if (inProgressAchievements.isEmpty()) {
                 noInProgressText.visibility = View.VISIBLE
                 inProgressRecyclerView.visibility = View.GONE
@@ -75,5 +85,11 @@ class AchievementActivity : AppCompatActivity() {
                 inProgressRecyclerView.adapter = AchievementAdapter(inProgressAchievements, false)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Reload achievements whenever the activity resumes
+        loadAchievements()
     }
 }
