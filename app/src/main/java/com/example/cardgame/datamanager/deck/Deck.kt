@@ -29,7 +29,7 @@ data class Deck(
                 deckId = 2,
                 name = "Unicorn тесте",
                 description = "Елегантен дизайн за вашите карти",
-                price = 0,
+                price = 10,
                 prefix = "unicorn_",
                 previewImageResId = R.drawable.unicorn_king_of_hearts
             )
