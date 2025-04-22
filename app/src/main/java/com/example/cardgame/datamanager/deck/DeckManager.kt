@@ -10,7 +10,6 @@ class DeckManager(private val context: Context) {
     private val userDeckDAO = db.userDeckDAO()
     private val prefs: SharedPreferences = context.getSharedPreferences("deck_prefs", Context.MODE_PRIVATE)
 
-    // Initialize decks if needed
     suspend fun initializeDecks() {
         val existingDecks = deckDAO.getAllDecks()
         if (existingDecks.isEmpty()) {
@@ -18,30 +17,25 @@ class DeckManager(private val context: Context) {
         }
     }
 
-    // Get all available decks
     suspend fun getAllDecks(): List<Deck> {
-        initializeDecks() // Make sure decks are initialized
+        initializeDecks()
         return deckDAO.getAllDecks()
     }
 
-    // Get decks owned by a user
     suspend fun getUserDecks(userId: Int): List<Deck> {
         return userDeckDAO.getUserDecksWithDetails(userId)
     }
 
-    // Add a deck to a user's collection
     suspend fun addDeckToUser(userId: Int, deckId: Int): Boolean {
         return try {
-            // First check if this is the user's first deck
             val existingDecks = userDeckDAO.getUserDecks(userId)
             val isFirstDeck = existingDecks.isEmpty()
 
-            // Add the deck to the user's collection
             userDeckDAO.insertUserDeck(
                 UserDeck(
                     userId = userId,
                     deckId = deckId,
-                    isActive = isFirstDeck // Make active if it's the first deck
+                    isActive = isFirstDeck
                 )
             )
             true
@@ -50,7 +44,6 @@ class DeckManager(private val context: Context) {
         }
     }
 
-    // Set a user's active deck
     suspend fun setActiveDeck(userId: Int, deckId: Int): Boolean {
         return try {
             userDeckDAO.changeActiveDeck(userId, deckId)
@@ -60,15 +53,13 @@ class DeckManager(private val context: Context) {
         }
     }
 
-    // Get a user's active deck
     suspend fun getActiveDeck(userId: Int): Deck? {
         val activeDeckRelation = userDeckDAO.getActiveUserDeck(userId) ?: return null
         return deckDAO.getDeckById(activeDeckRelation.deckId)
     }
 
-    // Get the resource prefix for the active deck
     suspend fun getActiveResourcePrefix(userId: Int): String {
         val activeDeck = getActiveDeck(userId)
-        return activeDeck?.prefix ?: "card_" // Default to "card_" if no active deck
+        return activeDeck?.prefix ?: "card_"
     }
 }

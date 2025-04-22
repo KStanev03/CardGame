@@ -40,10 +40,10 @@ class AchievementAdapter(
         val achievement = achievements[position]
         Log.d(TAG, "Binding achievement: ${achievement.goalName}, completed=${achievement.isCompleted}")
 
-        // Set achievement title
+
         holder.titleTextView.text = achievement.goalName
 
-        // Set achievement description based on type
+
         val description = when {
             achievement.goalName.contains("Новак") ||
                     achievement.goalName.contains("Опитен Играч") ||
@@ -63,7 +63,7 @@ class AchievementAdapter(
         }
         holder.descriptionTextView.text = description
 
-        // Set progress
+
         val progress = if (achievement.targetValue > 0) {
             (achievement.currentValue * 100) / achievement.targetValue
         } else {
@@ -71,7 +71,7 @@ class AchievementAdapter(
         }
         holder.progressBar.progress = progress.coerceAtMost(100)
 
-        // Set progress text
+
         if (achievement.isCompleted || isCompleted) {
             holder.progressBar.progress = 100
             holder.progressTextView.text = "Завършено!"

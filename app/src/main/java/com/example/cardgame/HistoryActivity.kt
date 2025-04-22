@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cardgame.R
-import com.example.cardgame.adapter.GameHistoryAdapter
+import com.example.cardgame.adapters.GameHistoryAdapter
 import com.example.cardgame.datamanager.AppDatabase
 import com.example.cardgame.datamanager.LoggedUser
 import com.example.cardgame.datamanager.history.GameHistory
@@ -29,16 +29,16 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
-        // Initialize UI components
+
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
         emptyHistoryText = findViewById(R.id.emptyHistoryText)
         winCountText = findViewById(R.id.winCountText)
         lossCountText = findViewById(R.id.lossCountText)
 
-        // Get userId from intent or from LoggedUser
+
         userId = intent.getIntExtra("USER_ID", -1)
         if (userId == -1) {
-            // If not provided in intent, try to get from current logged in user
+
             val username = LoggedUser.getUsername()
             if (username != null) {
                 lifecycleScope.launch {
@@ -50,16 +50,13 @@ class HistoryActivity : AppCompatActivity() {
                 }
             }
         } else {
-            // If userId is provided, load history directly
             loadGameHistory()
         }
 
-        // Set up RecyclerView
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyAdapter = GameHistoryAdapter(emptyList())
         historyRecyclerView.adapter = historyAdapter
 
-        // Set up back button in toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.game_history)
     }
@@ -71,26 +68,21 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun loadGameHistory() {
         lifecycleScope.launch {
-            // Get game history from database
             val history = withContext(Dispatchers.IO) {
                 val db = AppDatabase.getInstance(applicationContext)
                 val historyDao = db.gameHistoryDAO()
 
-                // Get win/loss counts
                 val winCount = historyDao.getGameCountForUserByOutcome(userId, "WIN")
                 val lossCount = historyDao.getGameCountForUserByOutcome(userId, "LOSS")
 
-                // Update UI with counts
                 withContext(Dispatchers.Main) {
                     winCountText.text = getString(R.string.wins_count, winCount)
                     lossCountText.text = getString(R.string.losses_count, lossCount)
                 }
 
-                // Return game history list
                 historyDao.getGameHistoryForUser(userId)
             }
 
-            // Update UI with history data
             withContext(Dispatchers.Main) {
                 if (history.isEmpty()) {
                     emptyHistoryText.visibility = View.VISIBLE

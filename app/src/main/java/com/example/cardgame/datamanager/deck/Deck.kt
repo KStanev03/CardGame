@@ -21,7 +21,7 @@ data class Deck(
                 deckId = 1,
                 name = "Класическо тесте",
                 description = "Класически дизайн на карти за игра",
-                price = 0,  // Free/default
+                price = 0,
                 prefix = "card_",
                 previewImageResId = R.drawable.card_king_of_hearts
             ),
@@ -29,25 +29,9 @@ data class Deck(
                 deckId = 2,
                 name = "Unicorn тесте",
                 description = "Елегантен дизайн за вашите карти",
-                price = 0,  // Changed from 0 to make it free
+                price = 0,
                 prefix = "unicorn_",
                 previewImageResId = R.drawable.unicorn_king_of_hearts
-            ),
-            Deck(
-                deckId = 3,
-                name = "Vintage Deck",
-                description = "An elegant vintage style deck",
-                price = 350,
-                prefix = "vintage_",
-                previewImageResId = R.drawable.card_king_of_hearts // Changed to correct image
-            ),
-            Deck(
-                deckId = 4,
-                name = "Gold Edition",
-                description = "Luxury gold-themed playing cards",
-                price = 500,
-                prefix = "gold_",
-                previewImageResId = R.drawable.card_king_of_hearts // Changed to correct image
             )
         )
     }

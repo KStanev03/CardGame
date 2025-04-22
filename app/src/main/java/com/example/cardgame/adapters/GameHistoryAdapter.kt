@@ -1,4 +1,4 @@
-package com.example.cardgame.adapter
+package com.example.cardgame.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +27,6 @@ class GameHistoryAdapter(private var history: List<GameHistory>) :
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         val historyItem = history[position]
 
-        // Set outcome text with appropriate color
         holder.outcomeText.text = when (historyItem.outcome.lowercase()) {
             "win" -> "Победа"
             "loss" -> "Загуба"
@@ -41,11 +40,9 @@ class GameHistoryAdapter(private var history: List<GameHistory>) :
             }
         )
 
-        // Set other details
         holder.opponentText.text = historyItem.opponent ?: "Неизвестен противник"
         holder.scoreText.text = historyItem.score ?: "Резултатът не е записан"
 
-        // Format and set date
         holder.dateText.text = formatDate(historyItem.timestamp)
     }
 
@@ -57,7 +54,6 @@ class GameHistoryAdapter(private var history: List<GameHistory>) :
     }
 
     private fun formatDate(timestamp: String): String {
-        // Could enhance this to format the date more nicely
         return timestamp
     }
 

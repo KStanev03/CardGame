@@ -17,18 +17,15 @@ class PastraGame {
     private var lastCaptor: Player? = null
     private var gameLog = mutableListOf<String>()
 
-    // Последно изиграна карта за анимация
     var lastPlayedCard: Card? = null
 
     init {
-        // Създаване на тесте (без жокери)
         for (suit in Suit.values()) {
             for (rank in Rank.values()) {
                 deck.add(Card(rank, suit))
             }
         }
 
-        // Създаване на отбори
         teams.add(Team(0, "Отбор 1"))
         teams.add(Team(1, "Отбор 2"))
     }

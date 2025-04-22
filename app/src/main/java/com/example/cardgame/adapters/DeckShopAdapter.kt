@@ -31,14 +31,11 @@ class DeckShopAdapter(
 
     override fun onBindViewHolder(holder: DeckViewHolder, position: Int) {
         val deck = decks[position]
-
-        // Set deck preview image
+        
         holder.deckImage.setImageResource(deck.previewImageResId)
 
-        // Set deck name
         holder.deckName.text = deck.name
 
-        // Check if the user already owns this deck
         val isOwned = userDecks.any { it.deckId == deck.deckId }
 
         if (isOwned) {
@@ -51,7 +48,7 @@ class DeckShopAdapter(
             holder.deckPrice.text = "${deck.price} монети"
             holder.deckPrice.visibility = View.VISIBLE
 
-            // Set click listener for buy button
+
             holder.buyButton.setOnClickListener {
                 onBuyClicked(deck)
             }

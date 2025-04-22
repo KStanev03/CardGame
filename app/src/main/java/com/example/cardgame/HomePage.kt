@@ -72,7 +72,6 @@ class HomePage : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Reload the user's coins every time the page is resumed
         val userId = intent.getIntExtra("USER_ID", -1)
         if (userId != -1) {
             loadUserCoins(userId)
@@ -110,47 +109,9 @@ class HomePage : AppCompatActivity() {
             val achievementManager = AchievementManager(this@HomePage)
             val achievements = achievementManager.getUserAchievements(userId)
 
-            // If user has no achievements, initialize them
+
             if (achievements.isEmpty()) {
                 achievementManager.initializeAchievementsForUser(userId)
-            }
-        }
-    }
-
-    private fun loadUserAvatar(userId: Int, imageView: CircleImageView) {
-        if (userId == -1) return
-
-        val db = AppDatabase.getInstance(applicationContext)
-        val userInfoDAO = db.userInfoDAO()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val userInfo = userInfoDAO.getUserInfoByUserId(userId)
-
-                withContext(Dispatchers.Main) {
-                    userInfo?.let {
-                        try {
-                            val resourceId = resources.getIdentifier(it.avatar, "drawable", packageName)
-                            if (resourceId != 0) {
-                                imageView.setImageResource(resourceId)
-                            } else {
-                                // Fallback to default avatar
-                                imageView.setImageResource(R.drawable.panda)
-                            }
-                        } catch (e: Exception) {
-                            // If there's an error, use default avatar
-                            imageView.setImageResource(R.drawable.panda)
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@HomePage,
-                        "Error loading avatar: ${e.localizedMessage}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
         }
     }

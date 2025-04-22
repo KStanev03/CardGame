@@ -42,14 +42,13 @@ data class Card(val rank: Rank, val suit: Suit) {
             Suit.SPADES -> "spades"
         }
 
-        // This assumes you have card images named like "prefix_rankStr_of_suitStr"
-        // For example: "card_ace_of_hearts", "neon_2_of_clubs", etc.
+
         val resourceName = "${resourcePrefix}${rankStr}_of_${suitStr}"
 
         try {
             return R.drawable::class.java.getField(resourceName).getInt(null)
         } catch (e: Exception) {
-            // Fallback to the default card image if the resource doesn't exist
+
             return R.drawable.card_back
         }
     }

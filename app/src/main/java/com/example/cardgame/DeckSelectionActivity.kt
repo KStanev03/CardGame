@@ -23,12 +23,12 @@ class DeckSelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deck_selection)
 
-        // Initialize views
+
         recyclerView = findViewById(R.id.deckSelectionRecyclerView)
         titleTextView = findViewById(R.id.tvDeckSelectionTitle)
         val backButton = findViewById<Button>(R.id.backButtonDeckSelection)
 
-        // Get user ID from intent
+
         userId = intent.getIntExtra("USER_ID", -1)
         if (userId == -1) {
             Toast.makeText(this, "Грешка: Потребителят не е намерен", Toast.LENGTH_SHORT).show()
@@ -36,16 +36,12 @@ class DeckSelectionActivity : AppCompatActivity() {
             return
         }
 
-        // Initialize deck manager
         deckManager = DeckManager(this)
 
-        // Set up recycler view
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        // Load user's decks
         loadUserDecks()
 
-        // Back button click listener
         backButton.setOnClickListener {
             finish()
         }
@@ -54,19 +50,15 @@ class DeckSelectionActivity : AppCompatActivity() {
     private fun loadUserDecks() {
         lifecycleScope.launch {
             try {
-                // Get user's purchased decks
                 val userDecks = deckManager.getUserDecks(userId)
 
-                // Get active deck
                 val activeDeck = deckManager.getActiveDeck(userId)
 
-                // Set up adapter
                 val adapter = DeckSelectionAdapter(userDecks, activeDeck) { selectedDeck ->
                     setActiveDeck(selectedDeck)
                 }
                 recyclerView.adapter = adapter
 
-                // Update title with count
                 titleTextView.text = "Твоето тесте (${userDecks.size})"
             } catch (e: Exception) {
                 Toast.makeText(
@@ -88,9 +80,7 @@ class DeckSelectionActivity : AppCompatActivity() {
                         "${deck.name} вече е твоето активно тесте!",
                         Toast.LENGTH_SHORT
                     ).show()
-
-                    // Refresh the list to update active status
-                    loadUserDecks()
+                loadUserDecks()
                 } else {
                     Toast.makeText(
                         this@DeckSelectionActivity,

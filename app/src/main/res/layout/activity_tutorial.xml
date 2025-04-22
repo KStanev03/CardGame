@@ -5,12 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#35654d"
     tools:context=".TutorialActivity">
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#F8F8F8"
+        android:background="#35654d"
         android:padding="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +31,7 @@
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
                 android:text="🃏 ПАСТРА - Ръководство за игра"
-                android:textColor="#2C3E50"
+                android:textColor="@color/black"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -41,7 +42,7 @@
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="4dp"
                 android:text="ПАСТРА е завладяваща игра с карти, която се играе със стандартно тесте от 52 карти. Тя умело съчетава елементи на стратегия и късмет, което я прави забавна за играчи от всички възрасти."
-                android:textColor="#34495E"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <TextView
@@ -50,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:text="⚙️ Подготовка за игра"
-                android:textColor="#2C3E50"
+                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -60,8 +61,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="4dp"
-                android:text="• Брой играчи: 2-6\n• Тесте: Стандартно тесте от 52 карти\n• Раздаване: Всеки играч получава по 6 карти\n• Останалите карти се поставят като куп теглене\n• Горната карта от купа теглене се обръща с лице нагоре, за да започне купата за изхвърляне"
-                android:textColor="#34495E"
+                android:text="• Брой играчи: 4\n• Тесте: Стандартно тесте от 52 карти\n• Раздаване: Всеки играч получава по 4 карти\n• 4 карти се обръщат като само най-горната е с лице нагоре"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -70,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:text="🎚️ Стойност на картите"
-                android:textColor="#2C3E50"
+                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -80,8 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="4dp"
-                android:text="• Асо: 1 точка\n• 2-10: Номинална стойност\n• Вале: 11 точки\n• Дама: 12 точки\n• Поп: 13 точки"
-                android:textColor="#34495E"
+                android:text="• Асо: 1 точка\n• Вале: 1 точка\n• 2-ка спатия: 2 точки\n• 10-ка каро: 3 точки\n"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -90,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:text="🕹️ Как се играе"
-                android:textColor="#2C3E50"
+                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -100,8 +101,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="4dp"
-                android:text="1. Играчите се редуват по посока на часовниковата стрелка\n2. На своя ход трябва да направите едно от следните:\n   • Вземете горната карта от купата теглене\n   • Вземете горната карта от купата за изхвърляне\n3. След като сте взели карта, трябва да изхвърлите една карта с лице нагоре в купата за изхвърляне\n4. Целта е да съберете комбинации от карти - сетове и серии"
-                android:textColor="#34495E"
+                android:text="1. Играчите се редуват по посока на часовниковата стрелка\n2. Когато е твой ред сравняваш картата на масатас твоите карти\n3. Ако имаш същата карта то ти можеш да вземеш всичко от масата\n4. Ако имаш вале също можеш да вземеш всичко от масата\n5. Ако ли не даваш карта по своя преценка"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -109,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="✨ Комбинации"
-                android:textColor="#2C3E50"
+                android:text="✨ Пастра"
+                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -120,8 +121,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="4dp"
-                android:text="• Сетове: Три или четири карти от един и същи ранг (например три попa)\n• Серии: Три или повече последователни карти от една и съща боя (например 5, 6, 7 пика)\n• ПАСТРА: Специална комбинация от три чифта карти"
-                android:textColor="#34495E"
+                android:text="• Пастра се получава когато някой е взел всички карти. Следващият играч е дал карта(следователно има само една карта на масата) и следващият вземе със същата карта.\n• Пастрата е 10 или 20 точки. Тази с вале 20, всяка друга е 10 точки."
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -129,8 +130,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="🏆 Печелене"
-                android:textColor="#2C3E50"
+                android:text="🏆 Кой печели"
+                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -140,59 +141,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="4dp"
-                android:text="• Играчът, който пръв успее да подреди всичките си карти в валидни комбинации, печели рунда\n• Когато смятате, че имате печеливша ръка, обявете 'ПАСТРА!'\n• Ако комбинациите ви са валидни, вие печелите рунда\n• Ако комбинациите ви са грешни, трябва да изтеглите две наказателни карти"
-                android:textColor="#34495E"
+                android:text="• Печели отбора с най много точки.\n• Една игра без пастри е 16 точки.\n• 13 точки от картите и 3 точки от това кой има повече карти. "
+                android:textColor="@color/black"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/section_title_6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="💰 Точкуване"
-                android:textColor="#2C3E50"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/section_content_6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:lineSpacingExtra="4dp"
-                android:text="• Победителят получава точки, равни на сумата от стойностите на картите, останали в ръцете на опонентите му\n• Първият играч, достигнал 100 точки, печели играта\n• Специален бонус: Обявяването на ПАСТРА със специална комбинация носи двойно повече точки"
-                android:textColor="#34495E"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/section_title_7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="🃏 Специални правила"
-                android:textColor="#2C3E50"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/section_content_7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:lineSpacingExtra="4dp"
-                android:text="• Джокери: Могат да се използват като жокери, замествайки всяка друга карта\n• Ако купът теглене се изчерпи, разбъркайте купата за изхвърляне (с изключение на горната карта), за да образувате нов куп теглене\n• Играчите могат да обявяват ПАСТРА само на своя ход, след като са изтеглили карта"
-                android:textColor="#34495E"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btn_start_game"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#388E3C"
-                android:padding="16dp"
-                android:text="Играй сега!"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
 
         </LinearLayout>
     </ScrollView>

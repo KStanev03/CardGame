@@ -19,7 +19,7 @@ class DeckSelectionAdapter(
     class DeckViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val deckImage: ImageView = view.findViewById(R.id.deckImage)
         val deckName: TextView = view.findViewById(R.id.deckName)
-        val selectButton: Button = view.findViewById(R.id.buyButton) // Reusing shop layout
+        val selectButton: Button = view.findViewById(R.id.buyButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeckViewHolder {
@@ -31,20 +31,16 @@ class DeckSelectionAdapter(
     override fun onBindViewHolder(holder: DeckViewHolder, position: Int) {
         val deck = decks[position]
 
-        // Set deck preview image
         holder.deckImage.setImageResource(deck.previewImageResId)
 
-        // Set deck name
         holder.deckName.text = deck.name
 
-        // Check if this is the active deck
         val isActive = activeDeck?.deckId == deck.deckId
 
-        // Update button text and state
+
             holder.selectButton.text = if (isActive) "Активен" else "Избери"
         holder.selectButton.isEnabled = !isActive
 
-        // Set click listener for select button
         holder.selectButton.setOnClickListener {
             if (!isActive) {
                 onDeckSelected(deck)

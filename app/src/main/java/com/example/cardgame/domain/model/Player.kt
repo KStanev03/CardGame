@@ -1,10 +1,10 @@
 package com.example.cardgame.domain.model
 
-// Player class with added Pastra points tracking
+
 class Player(val name: String, val teamId: Int, val isHuman: Boolean = false) {
     val hand = mutableListOf<Card>()
     val capturedCards = mutableListOf<Card>()
-    var pastraPoints = 0 // Track Pastra points separately
+    var pastraPoints = 0
 
     fun playCard(index: Int): Card {
         return hand.removeAt(index)
@@ -27,7 +27,6 @@ class Player(val name: String, val teamId: Int, val isHuman: Boolean = false) {
         for (card in capturedCards) {
             score += card.getPoints()
         }
-        // Add the Pastra bonus points to the score
         score += pastraPoints
         return score
     }

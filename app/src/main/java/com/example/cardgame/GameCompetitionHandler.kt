@@ -11,9 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * Handles game completion tasks like updating history, points, achievements
- */
+
 class GameCompletionHandler(private val context: Context) {
 
     private val db = AppDatabase.getInstance(context)
@@ -21,9 +19,7 @@ class GameCompletionHandler(private val context: Context) {
     private val userInfoDAO = db.userInfoDAO()
     private val achievementManager = AchievementManager(context)
 
-    /**
-     * Process game completion
-     */
+
     fun handleGameCompletion(
         userId: Int,
         isPlayerWinner: Boolean,
@@ -32,13 +28,10 @@ class GameCompletionHandler(private val context: Context) {
         coroutineScope: CoroutineScope
     ) {
         coroutineScope.launch {
-            // Determine outcome
             val outcome = if (isPlayerWinner) "WIN" else "LOSS"
 
-            // Create score string
             val scoreString = "$playerScore-$aiScore"
 
-            // Record game history
             val gameHistory = GameHistory(
                 userId = userId,
                 outcome = outcome,
@@ -47,47 +40,35 @@ class GameCompletionHandler(private val context: Context) {
             )
 
             withContext(Dispatchers.IO) {
-                // Insert game history
+
                 gameHistoryDAO.insert(gameHistory)
 
-                // Update user points
                 val userInfo = userInfoDAO.getUserInfoByUserId(userId)
                 if (userInfo != null) {
-                    // Add player score to total points
                     val newPoints = userInfo.points + playerScore
 
-                    // Update high score if needed
                     val newHighScore = if(playerScore > userInfo.highScore) playerScore else userInfo.highScore
 
-                    // Update user info
                     userInfoDAO.updateUserPoints(userId, newPoints)
                     userInfoDAO.updateUserHighScore(userId, newHighScore)
 
-                    // Update achievements
                     achievementManager.updateAchievements(userId, outcome, playerScore)
                 }
             }
         }
     }
 
-    /**
-     * Only update achievements without recording game history
-     */
+
     fun updateAchievementsOnly(
         userId: Int,
         isPlayerWinner: Boolean,
         playerScore: Int
     ) {
-        // Determine outcome
         val outcome = if (isPlayerWinner) "WIN" else "LOSS"
 
-        // Update achievements
-       // achievementManager.updateAchievements(userId, outcome, playerScore)
     }
 
-    /**
-     * Initialize achievements for a new user
-     */
+
     fun initializeAchievements(userId: Int, coroutineScope: CoroutineScope) {
         coroutineScope.launch {
             achievementManager.initializeAchievementsForUser(userId)

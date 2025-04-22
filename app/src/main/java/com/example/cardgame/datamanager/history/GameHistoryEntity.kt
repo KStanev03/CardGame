@@ -39,5 +39,4 @@ data class GameHistory(
 
     @ColumnInfo(name = "score")
     val score: String? = null
-    // Add any other relevant information about the game here
 )

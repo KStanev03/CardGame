@@ -70,10 +70,10 @@ class Login : AppCompatActivity() {
 
             withContext(Dispatchers.IO) {
                 try {
-                    // Try to find user by email first
+
                     var user = userDAO.findByEmail(email)
 
-                    // If not found by email, try username
+
                     if (user == null) {
                         user = userDAO.findByUsername(email)
                     }
@@ -137,8 +137,7 @@ class Login : AppCompatActivity() {
                     getString(R.string.toast_login_attempts),
                     Toast.LENGTH_LONG
                 ).show()
-                // You could implement a temporary lockout here
-                // or other security measures
+
             } else {
                 Toast.makeText(
                     this@Login,

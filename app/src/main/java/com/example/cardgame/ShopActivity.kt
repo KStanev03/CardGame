@@ -27,38 +27,29 @@ class ShopActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop)
 
-        // Initialize views
         recyclerView = findViewById(R.id.deckRecyclerView)
         coinBalanceTextView = findViewById(R.id.tvShopCoins)
         val backButton = findViewById<Button>(R.id.backButton)
         val myDecksButton = findViewById<Button>(R.id.myDecksButton)
 
-        // Get user ID from intent
         userId = intent.getIntExtra("USER_ID", -1)
         if (userId == -1) {
             Toast.makeText(this, "Грешка: Потребителят не е намерен", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
+       deckManager = DeckManager(this)
 
-        // Initialize deck manager
-        deckManager = DeckManager(this)
-
-        // Set up recycler view
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        // Load user's coin balance
         loadUserCoins()
 
-        // Load available decks
         loadDecks()
 
-        // Back button click listener
         backButton.setOnClickListener {
             finish()
         }
 
-        // My Decks button click listener
         myDecksButton.setOnClickListener {
             val intent = Intent(this, DeckSelectionActivity::class.java)
             intent.putExtra("USER_ID", userId)
@@ -89,20 +80,16 @@ class ShopActivity : AppCompatActivity() {
     private fun loadDecks() {
         lifecycleScope.launch {
             try {
-                // Get all available decks
                 val allDecks = withContext(Dispatchers.IO) {
                     deckManager.getAllDecks()
                 }
 
-                // Get user's purchased decks
                 val userDecks = withContext(Dispatchers.IO) {
                     deckManager.getUserDecks(userId)
                 }
 
-                // Ensure default decks are added to user's collection
                 ensureDefaultDecksOwned(allDecks, userDecks)
 
-                // Set up adapter with refreshed user decks
                 val refreshedUserDecks = withContext(Dispatchers.IO) {
                     deckManager.getUserDecks(userId)
                 }
@@ -122,10 +109,8 @@ class ShopActivity : AppCompatActivity() {
     }
 
     private suspend fun ensureDefaultDecksOwned(allDecks: List<Deck>, userDecks: List<Deck>) {
-        // Find all free (price = 0) decks
         val freeDecks = allDecks.filter { it.price == 0 }
 
-        // Add any free decks that user doesn't already own
         for (freeDeck in freeDecks) {
             if (userDecks.none { it.deckId == freeDeck.deckId }) {
                 withContext(Dispatchers.IO) {
@@ -134,7 +119,6 @@ class ShopActivity : AppCompatActivity() {
             }
         }
 
-        // If user has no active deck, set the first free deck as active
         val activeDeck = withContext(Dispatchers.IO) {
             deckManager.getActiveDeck(userId)
         }
@@ -149,7 +133,6 @@ class ShopActivity : AppCompatActivity() {
     private fun purchaseDeck(deck: Deck) {
         lifecycleScope.launch {
             try {
-                // Check if user already owns this deck
                 val userDecks = withContext(Dispatchers.IO) {
                     deckManager.getUserDecks(userId)
                 }
@@ -163,7 +146,6 @@ class ShopActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                // Get user's current coin balance
                 val db = AppDatabase.getInstance(applicationContext)
                 val userInfo = withContext(Dispatchers.IO) {
                     db.userInfoDAO().getUserInfoByUserId(userId)
@@ -178,7 +160,6 @@ class ShopActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                // Check if user has enough coins
                 if (userInfo.money < deck.price) {
                     Toast.makeText(
                         this@ShopActivity,
@@ -188,11 +169,8 @@ class ShopActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                // Purchase the deck
                 val success = withContext(Dispatchers.IO) {
-                    // Deduct coins
                     db.userInfoDAO().updateUserMoney(userId, userInfo.money - deck.price)
-                    // Add deck to user's collection
                     deckManager.addDeckToUser(userId, deck.deckId)
                 }
 
@@ -202,11 +180,8 @@ class ShopActivity : AppCompatActivity() {
                         "Успешно закупен ${deck.name}!",
                         Toast.LENGTH_SHORT
                     ).show()
-
-                    // Refresh user's coin balance
                     loadUserCoins()
 
-                    // Refresh deck list to show updated ownership status
                     loadDecks()
                 } else {
                     Toast.makeText(

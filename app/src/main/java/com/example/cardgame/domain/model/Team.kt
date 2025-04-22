@@ -8,9 +8,7 @@ class Team(val id: Int, val name: String) {
         players.add(player)
     }
 
-//    fun getScore(): Int {
-//        return players.sumOf { it.getScore() }
-//    }
+
 
     fun getCapturedCardCount(): Int {
         return players.sumOf { it.capturedCards.size }
@@ -21,7 +19,6 @@ class Team(val id: Int, val name: String) {
         for (player in players) {
             score += player.getScore()
         }
-        // Add bonus points for having most cards
         return score + bonusPoints
     }
 
