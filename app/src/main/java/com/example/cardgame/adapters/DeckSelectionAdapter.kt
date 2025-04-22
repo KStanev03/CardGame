@@ -41,7 +41,7 @@ class DeckSelectionAdapter(
         val isActive = activeDeck?.deckId == deck.deckId
 
         // Update button text and state
-        holder.selectButton.text = if (isActive) "Active" else "Select"
+            holder.selectButton.text = if (isActive) "Активен" else "Избери"
         holder.selectButton.isEnabled = !isActive
 
         // Set click listener for select button

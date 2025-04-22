@@ -42,13 +42,13 @@ class DeckShopAdapter(
         val isOwned = userDecks.any { it.deckId == deck.deckId }
 
         if (isOwned) {
-            holder.buyButton.text = "Owned"
+            holder.buyButton.text = "Притежавано"
             holder.buyButton.isEnabled = false
             holder.deckPrice.visibility = View.GONE
         } else {
-            holder.buyButton.text = "Buy"
+            holder.buyButton.text = "Купи"
             holder.buyButton.isEnabled = true
-            holder.deckPrice.text = "${deck.price} coins"
+            holder.deckPrice.text = "${deck.price} монети"
             holder.deckPrice.visibility = View.VISIBLE
 
             // Set click listener for buy button

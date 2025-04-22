@@ -25,31 +25,27 @@ import kotlin.coroutines.resume
 class LocationHelper(private val context: Context) {
     private val locationManager =
         context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    private val TAG = "LocationHelper"
+    private val TAG = "ПомощникЛокация"
 
     suspend fun getCurrentLocation(): LocationResult {
-        // Check permissions first
         if (!hasLocationPermission()) {
             return LocationResult.PermissionRequired
         }
 
-        // Log that we're starting location fetching
-        Log.d(TAG, "Starting location fetch")
+        Log.d(TAG, "Започва търсене на местоположение")
 
-        // First try to get last known location (faster)
         val lastLocation = getLastKnownLocation()
         if (lastLocation != null) {
-            Log.d(TAG, "Got last known location: ${lastLocation.latitude}, ${lastLocation.longitude}")
+            Log.d(TAG, "Открито последно местоположение: ${lastLocation.latitude}, ${lastLocation.longitude}")
             val locationName = getLocationName(lastLocation.latitude, lastLocation.longitude)
             return LocationResult.Success(locationName)
         } else {
-            Log.d(TAG, "No last known location, requesting new location")
+            Log.d(TAG, "Няма последно местоположение, заявка за ново")
         }
 
-        // If last known location is not available, request a new one with timeout
-        return withTimeoutOrNull(15000) { // Reduced timeout to 15 seconds
+        return withTimeoutOrNull(15000) {
             requestLocationUpdates()
-        } ?: LocationResult.Error("Location request timed out. Try again or check device settings.")
+        } ?: LocationResult.Error("Времето за търсене на местоположение изтече. Опитайте отново или проверете настройките на устройството.")
     }
 
     private fun hasLocationPermission(): Boolean {
@@ -63,68 +59,56 @@ class LocationHelper(private val context: Context) {
     }
 
     private fun getLastKnownLocation(): Location? {
-        // Always check permissions before accessing location services
         if (!hasLocationPermission()) {
-            Log.d(TAG, "No location permissions")
+            Log.d(TAG, "Липсват разрешения за локация")
             return null
         }
 
         try {
-            // Try GPS provider first
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 try {
-                    val location =
-                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                     if (location != null) return location
                 } catch (se: SecurityException) {
-                    Log.e(TAG, "Security exception getting GPS location", se)
+                    Log.e(TAG, "Грешка при получаване на GPS местоположение", se)
                 }
             }
 
-            // Try Network provider next
             if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 try {
-                    val location =
-                        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                     if (location != null) return location
                 } catch (se: SecurityException) {
-                    Log.e(TAG, "Security exception getting Network location", se)
+                    Log.e(TAG, "Грешка при получаване на мрежово местоположение", se)
                 }
             }
 
-            // If we're here, no location was available
-            Log.d(TAG, "No last known location available")
+            Log.d(TAG, "Няма налично последно местоположение")
             return null
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting last known location", e)
+            Log.e(TAG, "Грешка при получаване на местоположение", e)
             return null
         }
     }
 
     private suspend fun requestLocationUpdates(): LocationResult =
         suspendCancellableCoroutine { cont ->
-            // Check permissions again
             if (!hasLocationPermission()) {
                 cont.resume(LocationResult.PermissionRequired)
                 return@suspendCancellableCoroutine
             }
 
             try {
-                // Create location listener
                 val locationListener = object : LocationListener {
                     override fun onLocationChanged(location: Location) {
-                        // Remove updates once we have a location
                         try {
                             locationManager.removeUpdates(this)
                         } catch (se: SecurityException) {
-                            Log.e(TAG, "Security exception removing location updates", se)
+                            Log.e(TAG, "Грешка при премахване на слушателя", se)
                         }
 
-                        // Launch coroutine to get location name
                         kotlinx.coroutines.GlobalScope.launch {
-                            val locationName =
-                                getLocationName(location.latitude, location.longitude)
-                            // Resume coroutine with result if not canceled
+                            val locationName = getLocationName(location.latitude, location.longitude)
                             if (cont.isActive) {
                                 cont.resume(LocationResult.Success(locationName))
                             }
@@ -135,26 +119,24 @@ class LocationHelper(private val context: Context) {
                     override fun onProviderEnabled(provider: String) {}
                     override fun onProviderDisabled(provider: String) {
                         if (cont.isActive) {
-                            cont.resume(LocationResult.Error("Location provider disabled"))
+                            cont.resume(LocationResult.Error("Локационният доставчик е деактивиран"))
                         }
                     }
                 }
 
-                // Get available providers
                 val providers = try {
                     locationManager.getProviders(true)
                 } catch (se: SecurityException) {
-                    Log.e(TAG, "Security exception getting providers", se)
+                    Log.e(TAG, "Грешка при получаване на доставчици", se)
                     emptyList<String>()
                 }
 
                 if (providers.isEmpty()) {
-                    cont.resume(LocationResult.Error("No location providers available"))
+                    cont.resume(LocationResult.Error("Няма налични доставчици на местоположение"))
                     return@suspendCancellableCoroutine
                 }
 
-                // Request updates from available providers
-                var atLeastOneProviderSucceeded = false
+                var понеЕдинУспешен = false
                 for (provider in providers) {
                     try {
                         locationManager.requestLocationUpdates(
@@ -164,37 +146,28 @@ class LocationHelper(private val context: Context) {
                             locationListener,
                             Looper.getMainLooper()
                         )
-                        atLeastOneProviderSucceeded = true
+                        понеЕдинУспешен = true
                     } catch (se: SecurityException) {
-                        Log.e(
-                            TAG,
-                            "Security exception requesting updates for provider: $provider",
-                            se
-                        )
+                        Log.e(TAG, "Грешка при заявка за актуализация от: $provider", se)
                     }
                 }
 
-                if (!atLeastOneProviderSucceeded) {
-                    cont.resume(LocationResult.Error("Failed to request location updates - permission denied"))
+                if (!понеЕдинУспешен) {
+                    cont.resume(LocationResult.Error("Неуспешна заявка за местоположение - липсва разрешение"))
                     return@suspendCancellableCoroutine
                 }
 
-                // Make sure we clean up when coroutine is cancelled
                 cont.invokeOnCancellation {
                     try {
                         locationManager.removeUpdates(locationListener)
                     } catch (se: SecurityException) {
-                        Log.e(
-                            TAG,
-                            "Security exception removing location updates on cancellation",
-                            se
-                        )
+                        Log.e(TAG, "Грешка при спиране на слушателя при отказ", se)
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error requesting location updates", e)
+                Log.e(TAG, "Грешка при заявка за местоположение", e)
                 if (cont.isActive) {
-                    cont.resume(LocationResult.Error("Error requesting location: ${e.message}"))
+                    cont.resume(LocationResult.Error("Грешка при заявка за местоположение: ${e.message}"))
                 }
             }
         }
@@ -202,91 +175,70 @@ class LocationHelper(private val context: Context) {
     private suspend fun getLocationName(latitude: Double, longitude: Double): String {
         return withContext(Dispatchers.IO) {
             try {
-                Log.d(TAG, "Getting location name for: $latitude, $longitude")
+                Log.d(TAG, "Получаване на име за координати: $latitude, $longitude")
                 val geocoder = Geocoder(context, Locale.getDefault())
-
-                // First, let's include the coordinates in case geocoding fails
                 val coordinateString = "%.4f, %.4f".format(latitude, longitude)
 
-                // Handle API level-specific geocoding
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    var locationName = coordinateString // Use coordinates as fallback
-
+                    var locationName = coordinateString
                     try {
                         geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
                             if (addresses.isNotEmpty()) {
-                                Log.d(TAG, "Got address: ${addresses[0]}")
+                                Log.d(TAG, "Намерен адрес: ${addresses[0]}")
                                 locationName = formatAddress(addresses[0]) ?: coordinateString
                             } else {
-                                Log.d(TAG, "No addresses found for location")
+                                Log.d(TAG, "Няма адрес за тези координати")
                             }
                         }
-                        // Add a small delay to ensure geocoder callback completes
                         kotlinx.coroutines.delay(1000)
                     } catch (e: IOException) {
-                        Log.e(TAG, "Geocoder IO Exception", e)
+                        Log.e(TAG, "Грешка от Geocoder", e)
                     }
 
-                    Log.d(TAG, "Returning location name: $locationName")
+                    Log.d(TAG, "Връщане на име: $locationName")
                     return@withContext locationName
                 } else {
                     @Suppress("DEPRECATION")
                     try {
                         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
                         if (!addresses.isNullOrEmpty()) {
-                            Log.d(TAG, "Got address: ${addresses[0]}")
+                            Log.d(TAG, "Намерен адрес: ${addresses[0]}")
                             return@withContext formatAddress(addresses[0]) ?: coordinateString
                         } else {
-                            Log.d(TAG, "No addresses found for location")
+                            Log.d(TAG, "Няма адрес за тези координати")
                             return@withContext coordinateString
                         }
                     } catch (e: IOException) {
-                        Log.e(TAG, "Geocoder IO Exception", e)
-                        return@withContext "Location: $coordinateString"
+                        Log.e(TAG, "Грешка от Geocoder", e)
+                        return@withContext "Локация: $coordinateString"
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error in getLocationName", e)
-                return@withContext "Location Error"
+                Log.e(TAG, "Грешка при извличане на име на локация", e)
+                return@withContext "Грешка при локация"
             }
         }
     }
 
     private fun formatAddress(address: Address): String? {
-        // Log all available address components for debugging
         Log.d(
-            TAG, "Address components: " +
-                    "locality=${address.locality}, " +
-                    "subLocality=${address.subLocality}, " +
-                    "subAdminArea=${address.subAdminArea}, " +
-                    "adminArea=${address.adminArea}, " +
-                    "countryName=${address.countryName}"
+            TAG, "Компоненти на адреса: " +
+                    "град=${address.locality}, " +
+                    "подрайон=${address.subLocality}, " +
+                    "община=${address.subAdminArea}, " +
+                    "област=${address.adminArea}, " +
+                    "държава=${address.countryName}"
         )
 
-        // Enhanced address formatting
-        val locality = address.locality
-        val subLocality = address.subLocality
-        val subAdminArea = address.subAdminArea
-        val adminArea = address.adminArea
-        val countryName = address.countryName
-
-        // Try to get city name using different fields
-        val city = when {
-            locality != null -> locality
-            subLocality != null -> subLocality
-            subAdminArea != null -> subAdminArea
-            adminArea != null -> adminArea
-            else -> ""
-        }
-
-        val country = countryName ?: ""
+        val city = address.locality ?: address.subLocality ?: address.subAdminArea ?: address.adminArea ?: ""
+        val country = address.countryName ?: ""
 
         return when {
             city.isNotEmpty() && country.isNotEmpty() -> "$city, $country"
             city.isNotEmpty() -> city
             country.isNotEmpty() -> country
             else -> {
-                Log.d(TAG, "No meaningful address components")
+                Log.d(TAG, "Няма достатъчно информация за адреса")
                 null
             }
         }

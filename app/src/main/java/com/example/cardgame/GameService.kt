@@ -53,7 +53,7 @@ class GameService(private val context: Context) {
         val gameHistory = GameHistory(
             userId = userId,
             outcome = if (isWin) "WIN" else "LOSS",
-            opponent = "AI Team",
+            opponent = "AI",
             score = score
         )
 

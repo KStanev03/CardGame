@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
 
-
 class Register : AppCompatActivity() {
     private lateinit var userDAO: UserDAO
     private lateinit var userInfoDAO: UserInfoDAO
@@ -55,9 +54,7 @@ class Register : AppCompatActivity() {
         }
     }
 
-
     private fun isPasswordStrong(password: String): Boolean {
-
         val passwordPattern = Pattern.compile(
             "^(?=.*[0-9])" +       // at least 1 number
                     "(?=.*[a-z])" +         // at least 1 lower case letter
@@ -81,26 +78,26 @@ class Register : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.tPassRegister).text.toString()
         val confirmPassword = findViewById<EditText>(R.id.tPassConfirmRegister).text.toString()
 
-        // Validate all fields
+        // Проверка за попълнени полета
         if (email.isBlank() || username.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Моля попълнете всички полета", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Check if passwords match
+        // Проверка дали паролите съвпадат
         if (password != confirmPassword) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Паролите не съвпадат", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (!isPasswordStrong(password)) {
             Toast.makeText(
                 this,
-                "Password must be at least 8 characters long and contain:\n" +
-                        "- Uppercase letter\n" +
-                        "- Lowercase letter\n" +
-                        "- Number\n" +
-                        "- Special character (!@#$%^&*()_+)",
+                "Паролата трябва да бъде поне 8 знака и да съдържа:\n" +
+                        "- Главна буква\n" +
+                        "- Малка буква\n" +
+                        "- Число\n" +
+                        "- Специален символ (!@#$%^&*()_+)",
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -109,7 +106,7 @@ class Register : AppCompatActivity() {
         if (!isEmailValid(email)) {
             Toast.makeText(
                 this,
-                "Please enter a valid email address!\n",
+                "Моля въведете валиден имейл адрес!\n",
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -117,13 +114,13 @@ class Register : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // Check if username or email already exists
+                // Проверка дали потребителското име или имейл вече съществуват
                 val existingUserByUsername = userDAO.findByUsername(username)
                 if (existingUserByUsername != null) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             this@Register,
-                            "Username is already taken",
+                            "Потребителското име вече е заето",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -135,21 +132,21 @@ class Register : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             this@Register,
-                            "Email is already registered",
+                            "Имейлът вече е регистриран",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                     return@launch
                 }
 
-                // Insert the user with their actual username (not hardcoded)
+                // Вмъкване на новия потребител
                 userDAO.insert(User(0, username = username, password = password, email = email))
 
                 val newUser = userDAO.findByUsername(username)
 
                 newUser?.let {
                     val userInfo = UserInfo(
-                        profileId = 0, // or omit if it's auto-generated
+                        profileId = 0, // или го пропуснете, ако е авто-генериран
                         userId = it.uid,
                         displayName = it.username,
                         avatar = "panda",
@@ -163,14 +160,12 @@ class Register : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         this@Register,
-                        "User registered successfully!",
+                        "Потребителят е регистриран успешно!",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
 
                 val id = userDAO.findByUsername(username)
-
-
 
                 withContext(Dispatchers.Main) {
                     val intent = Intent(this@Register, Login::class.java)
@@ -182,7 +177,7 @@ class Register : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         this@Register,
-                        "Failed to register user: ${e.message}",
+                        "Неуспешна регистрация: ${e.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

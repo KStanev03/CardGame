@@ -36,7 +36,7 @@ class ShopActivity : AppCompatActivity() {
         // Get user ID from intent
         userId = intent.getIntExtra("USER_ID", -1)
         if (userId == -1) {
-            Toast.makeText(this, "Error: User not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Грешка: Потребителят не е намерен", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -74,12 +74,12 @@ class ShopActivity : AppCompatActivity() {
                     db.userInfoDAO().getUserInfoByUserId(userId)
                 }
                 userInfo?.let {
-                    coinBalanceTextView.text = "${it.money} coins"
+                    coinBalanceTextView.text = "${it.money} монети"
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@ShopActivity,
-                    "Error loading coins: ${e.localizedMessage}",
+                    "Грешка с монетите: ${e.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -114,7 +114,7 @@ class ShopActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(
                     this@ShopActivity,
-                    "Error loading decks: ${e.localizedMessage}",
+                    "Грешка при зареждане на тестета: ${e.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -157,7 +157,7 @@ class ShopActivity : AppCompatActivity() {
                 if (userDecks.any { it.deckId == deck.deckId }) {
                     Toast.makeText(
                         this@ShopActivity,
-                        "You already own this deck",
+                        "Вече притежаваш това тесте",
                         Toast.LENGTH_SHORT
                     ).show()
                     return@launch
@@ -172,7 +172,7 @@ class ShopActivity : AppCompatActivity() {
                 if (userInfo == null) {
                     Toast.makeText(
                         this@ShopActivity,
-                        "Error: User info not found",
+                        "Грешка: Потребителското инфо не е намерено",
                         Toast.LENGTH_SHORT
                     ).show()
                     return@launch
@@ -182,7 +182,7 @@ class ShopActivity : AppCompatActivity() {
                 if (userInfo.money < deck.price) {
                     Toast.makeText(
                         this@ShopActivity,
-                        "Not enough coins! You need ${deck.price} coins",
+                        "не достатчно монети! Трябват ти ${deck.price} монети",
                         Toast.LENGTH_SHORT
                     ).show()
                     return@launch
@@ -199,7 +199,7 @@ class ShopActivity : AppCompatActivity() {
                 if (success) {
                     Toast.makeText(
                         this@ShopActivity,
-                        "Successfully purchased ${deck.name}!",
+                        "Успешно закупен ${deck.name}!",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -211,14 +211,14 @@ class ShopActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@ShopActivity,
-                        "Error purchasing deck",
+                        "Грешка при покупка на тесте",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@ShopActivity,
-                    "Error: ${e.localizedMessage}",
+                    "Грешка: ${e.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

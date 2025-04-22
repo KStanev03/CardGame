@@ -31,7 +31,7 @@ class DeckSelectionActivity : AppCompatActivity() {
         // Get user ID from intent
         userId = intent.getIntExtra("USER_ID", -1)
         if (userId == -1) {
-            Toast.makeText(this, "Error: User not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Грешка: Потребителят не е намерен", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -67,11 +67,11 @@ class DeckSelectionActivity : AppCompatActivity() {
                 recyclerView.adapter = adapter
 
                 // Update title with count
-                titleTextView.text = "Your Decks (${userDecks.size})"
+                titleTextView.text = "Твоето тесте (${userDecks.size})"
             } catch (e: Exception) {
                 Toast.makeText(
                     this@DeckSelectionActivity,
-                    "Error loading decks: ${e.localizedMessage}",
+                    "Грешка при зарежданео на тесте: ${e.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -85,7 +85,7 @@ class DeckSelectionActivity : AppCompatActivity() {
                 if (success) {
                     Toast.makeText(
                         this@DeckSelectionActivity,
-                        "${deck.name} is now your active deck!",
+                        "${deck.name} вече е твоето активно тесте!",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -94,14 +94,14 @@ class DeckSelectionActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@DeckSelectionActivity,
-                        "Failed to set active deck",
+                        "Грешка при смяна към активно тесте",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@DeckSelectionActivity,
-                    "Error: ${e.localizedMessage}",
+                    "Грешка: ${e.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

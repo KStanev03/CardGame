@@ -19,16 +19,16 @@ data class Deck(
         val PREDEFINED_DECKS = listOf(
             Deck(
                 deckId = 1,
-                name = "Classic Deck",
-                description = "The classic playing card design",
+                name = "Класическо тесте",
+                description = "Класически дизайн на карти за игра",
                 price = 0,  // Free/default
                 prefix = "card_",
                 previewImageResId = R.drawable.card_king_of_hearts
             ),
             Deck(
                 deckId = 2,
-                name = "Unicorn Deck",
-                description = "A sleek neon design for your cards",
+                name = "Unicorn тесте",
+                description = "Елегантен дизайн за вашите карти",
                 price = 0,  // Changed from 0 to make it free
                 prefix = "unicorn_",
                 previewImageResId = R.drawable.unicorn_king_of_hearts

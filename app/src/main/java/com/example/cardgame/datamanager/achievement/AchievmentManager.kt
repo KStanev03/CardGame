@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Manages achievements for users in the card game
+ * Управлява постиженията за потребителите в играта на карти.
  */
 class AchievementManager(private val context: Context) {
 
@@ -18,33 +18,33 @@ class AchievementManager(private val context: Context) {
     private val userInfoDAO = db.userInfoDAO()
 
     /**
-     * Initialize achievements for a new user
+     * Инициализира постиженията за нов потребител.
      */
     suspend fun initializeAchievementsForUser(userId: Int) {
-        // Win count achievements
+        // Постижения за брой победи
         val winAchievements = listOf(
-            Achievement(userId = userId, goalName = "Rookie Winner", targetValue = 5, currentValue = 0),
-            Achievement(userId = userId, goalName = "Experienced Player", targetValue = 10, currentValue = 0),
-            Achievement(userId = userId, goalName = "Pastra Master", targetValue = 25, currentValue = 0),
-            Achievement(userId = userId, goalName = "Card Game Champion", targetValue = 50, currentValue = 0)
+            Achievement(userId = userId, goalName = "Новак", targetValue = 5, currentValue = 0),
+            Achievement(userId = userId, goalName = "Опитен Играч", targetValue = 10, currentValue = 0),
+            Achievement(userId = userId, goalName = "Пастра Майстор", targetValue = 25, currentValue = 0),
+            Achievement(userId = userId, goalName = "Пастра Шампион", targetValue = 50, currentValue = 0)
         )
 
-        // Points achievements
+        // Постижения за точки
         val pointsAchievements = listOf(
-            Achievement(userId = userId, goalName = "Point Collector", targetValue = 100, currentValue = 0),
-            Achievement(userId = userId, goalName = "Point Accumulator", targetValue = 250, currentValue = 0),
-            Achievement(userId = userId, goalName = "Point Master", targetValue = 500, currentValue = 0),
-            Achievement(userId = userId, goalName = "Point Champion", targetValue = 1000, currentValue = 0)
+            Achievement(userId = userId, goalName = "Събирач на Точки", targetValue = 100, currentValue = 0),
+            Achievement(userId = userId, goalName = "Трупач на Точки", targetValue = 250, currentValue = 0),
+            Achievement(userId = userId, goalName = "Майстор на Точките", targetValue = 500, currentValue = 0),
+            Achievement(userId = userId, goalName = "Шампион по Точки", targetValue = 1000, currentValue = 0)
         )
 
-        // Game count achievements
+        // Постижения за брой изиграни игри
         val gameAchievements = listOf(
-            Achievement(userId = userId, goalName = "Card Game Enthusiast", targetValue = 5, currentValue = 0),
-            Achievement(userId = userId, goalName = "Card Game Addict", targetValue = 25, currentValue = 0),
-            Achievement(userId = userId, goalName = "Card Game Veteran", targetValue = 100, currentValue = 0)
+            Achievement(userId = userId, goalName = "Ентусиаст", targetValue = 5, currentValue = 0),
+            Achievement(userId = userId, goalName = "Зависим", targetValue = 25, currentValue = 0),
+            Achievement(userId = userId, goalName = "Ветеран", targetValue = 100, currentValue = 0)
         )
 
-        // Insert all achievements
+        // Вмъкване на всички постижения
         withContext(Dispatchers.IO) {
             for (achievement in winAchievements + pointsAchievements + gameAchievements) {
                 achievementDAO.insertAchievement(achievement)
@@ -53,37 +53,37 @@ class AchievementManager(private val context: Context) {
     }
 
     /**
-     * Update achievements after a game completes
+     * Актуализира постиженията след завършване на игра.
      */
     suspend fun updateAchievements(userId: Int, outcome: String, score: Int) {
         withContext(Dispatchers.IO) {
-            // Update win achievements if the user won
+            // Актуализиране на постиженията за победи, ако потребителят е спечелил
             if (outcome == "WIN") {
                 updateWinAchievements(userId)
             }
 
-            // Update points achievements
+            // Актуализиране на постиженията за точки
             updatePointsAchievements(userId, score)
 
-            // Update game count achievements (regardless of outcome)
+            // Актуализиране на постиженията за брой изиграни игри (независимо от резултата)
             updateGameCountAchievements(userId)
         }
     }
 
     /**
-     * Update win-related achievements
+     * Актуализира постиженията, свързани с победи.
      */
     private suspend fun updateWinAchievements(userId: Int) {
-        // Get total wins
+        // Вземане на общия брой победи
         val totalWins = gameHistoryDAO.getGameCountForUserByOutcome(userId, "WIN")
 
-        // Get all win achievements
+        // Вземане на всички постижения за победи
         val winAchievements = achievementDAO.getAchievementsForUser(userId).filter {
-            it.goalName.contains("Winner") || it.goalName.contains("Master") ||
-                    it.goalName.contains("Champion") || it.goalName.contains("Player")
+            it.goalName.contains("Победител") || it.goalName.contains("Майстор") ||
+                    it.goalName.contains("Шампион") || it.goalName.contains("Играч")
         }
 
-        // Update each achievement's progress
+        // Актуализиране на напредъка на всяко постижение
         for (achievement in winAchievements) {
             if (!achievement.isCompleted && achievement.targetValue <= totalWins) {
                 achievementDAO.updateAchievement(
@@ -101,19 +101,19 @@ class AchievementManager(private val context: Context) {
     }
 
     /**
-     * Update point-related achievements
+     * Актуализира постиженията, свързани с точки.
      */
     private suspend fun updatePointsAchievements(userId: Int, gamePoints: Int) {
-        // Get user info to get current total points
+        // Вземане на информация за потребителя, за да се вземат текущите общи точки
         val userInfo = userInfoDAO.getUserInfoByUserId(userId)
         val totalPoints = userInfo?.points ?: 0
 
-        // Get all points achievements
+        // Вземане на всички постижения за точки
         val pointsAchievements = achievementDAO.getAchievementsForUser(userId).filter {
-            it.goalName.contains("Point")
+            it.goalName.contains("Точки")
         }
 
-        // Update each achievement's progress
+        // Актуализиране на напредъка на всяко постижение
         for (achievement in pointsAchievements) {
             if (!achievement.isCompleted && achievement.targetValue <= totalPoints) {
                 achievementDAO.updateAchievement(
@@ -131,21 +131,21 @@ class AchievementManager(private val context: Context) {
     }
 
     /**
-     * Update game count achievements
+     * Актуализира постиженията за брой изиграни игри.
      */
     private suspend fun updateGameCountAchievements(userId: Int) {
-        // Get total games played (WIN + LOSS)
+        // Вземане на общия брой изиграни игри (ПОБЕДИ + ЗАГУБИ)
         val totalWins = gameHistoryDAO.getGameCountForUserByOutcome(userId, "WIN")
         val totalLosses = gameHistoryDAO.getGameCountForUserByOutcome(userId, "LOSS")
         val totalGames = totalWins + totalLosses
 
-        // Get all game count achievements
+        // Вземане на всички постижения за брой изиграни игри
         val gameCountAchievements = achievementDAO.getAchievementsForUser(userId).filter {
-            it.goalName.contains("Enthusiast") || it.goalName.contains("Addict") ||
-                    it.goalName.contains("Veteran")
+            it.goalName.contains("Ентусиаст") || it.goalName.contains("Зависим") ||
+                    it.goalName.contains("Ветеран")
         }
 
-        // Update each achievement's progress
+        // Актуализиране на напредъка на всяко постижение
         for (achievement in gameCountAchievements) {
             if (!achievement.isCompleted && achievement.targetValue <= totalGames) {
                 achievementDAO.updateAchievement(
@@ -163,7 +163,7 @@ class AchievementManager(private val context: Context) {
     }
 
     /**
-     * Get all achievements for a user
+     * Вземане на всички постижения за потребител.
      */
     suspend fun getUserAchievements(userId: Int): List<Achievement> {
         return withContext(Dispatchers.IO) {
@@ -172,7 +172,7 @@ class AchievementManager(private val context: Context) {
     }
 
     /**
-     * Get only completed achievements for a user
+     * Вземане само на завършени постижения за потребител.
      */
     suspend fun getCompletedAchievements(userId: Int): List<Achievement> {
         return withContext(Dispatchers.IO) {
@@ -181,7 +181,7 @@ class AchievementManager(private val context: Context) {
     }
 
     /**
-     * Get in-progress achievements for a user
+     * Вземане на незавършени постижения за потребител.
      */
     suspend fun getInProgressAchievements(userId: Int): List<Achievement> {
         return withContext(Dispatchers.IO) {

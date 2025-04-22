@@ -313,6 +313,7 @@
     <string name="toast_camera_permission_denied">Няма достъп до камера!</string>
     <string name="toast_camera_error">Грешка камера: %1$s</string>
 
+
     <!-- Friends Activity Toast Messages -->
     <string name="toast_enter_username">Въведи име</string>
     <string name="toast_user_not_found">Потребителят не е намерен</string>
@@ -328,5 +329,5 @@
     <string name="losses_count">Загуби: %1$d</string>
     <string name="recent_games">Скорошни игри</string>
     <string name="no_game_history">Няма налична история. Играй няколко игри!</string>
-    <string name="vs">vs</string>
+    <string name="vs">срещу</string>
 </resources>

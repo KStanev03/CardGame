@@ -88,7 +88,7 @@ class Profile : AppCompatActivity() {
         userId = intent.getIntExtra("USER_ID", -1)
 
         if (userId == -1) {
-            Toast.makeText(this, "Invalid user ID", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Невалидно потребителско ID", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -130,7 +130,7 @@ class Profile : AppCompatActivity() {
                 pointsTextView.text = it.points.toString()
                 moneyTextView.text = it.money.toString()
                 highScoreTextView.text = it.highScore.toString()
-                locationTextView.text = it.location ?: "Location not set"
+                locationTextView.text = it.location ?: "Локацията не е зададена"
 
                 // Load avatar
                 try {
@@ -154,7 +154,7 @@ class Profile : AppCompatActivity() {
 
         // Create a grid layout for the avatars
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Choose your avatar")
+        builder.setTitle("Избери аватар")
 
         val inflater = this.layoutInflater
         val dialogView = inflater.inflate(R.layout.avatar_selection_grid, null)
@@ -164,7 +164,7 @@ class Profile : AppCompatActivity() {
         gridView.adapter = adapter
 
         builder.setView(dialogView)
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        builder.setNegativeButton("Откажи") { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -203,21 +203,21 @@ class Profile : AppCompatActivity() {
                 // Update the image view with the new avatar
                 val resourceId = resources.getIdentifier(avatarName, "drawable", packageName)
                 profileImageView.setImageResource(resourceId)
-                Toast.makeText(this@Profile, "Avatar updated successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Profile, "Аватарът е актоализиран успешно", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun showUpdateConfirmationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Update Profile")
-            .setMessage("Are you sure you want to update your profile information?")
-            .setPositiveButton("Update") { _, _ ->
+            .setTitle("Актоализация на профил")
+            .setMessage("Сигурен ли си с актуализацията?")
+            .setPositiveButton("Актоализация") { _, _ ->
                 lifecycleScope.launch {
                     updateUserProfile()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Отказ", null)
             .show()
     }
 
@@ -226,7 +226,7 @@ class Profile : AppCompatActivity() {
 
         if (displayName.isBlank()) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@Profile, "Display name cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Profile, "Показваното име е задължително", Toast.LENGTH_SHORT).show()
             }
             return
         }
@@ -251,20 +251,20 @@ class Profile : AppCompatActivity() {
         }
 
         withContext(Dispatchers.Main) {
-            Toast.makeText(this@Profile, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Profile, "Профилът актуализиран успешно", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun showDeleteConfirmationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Delete Profile")
-            .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle("Изтрий Профил")
+            .setMessage("Сигурен ли си, че искаш да изтриеш профила?")
+            .setPositiveButton("Изтрий") { _, _ ->
                 lifecycleScope.launch {
                     deleteUserAccount()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Отказ", null)
             .show()
     }
 
@@ -275,7 +275,7 @@ class Profile : AppCompatActivity() {
         }
 
         withContext(Dispatchers.Main) {
-            Toast.makeText(this@Profile, "Account deleted successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Profile, "Профилът е изтрит успешно", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this@Profile, Login::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -299,7 +299,7 @@ class Profile : AppCompatActivity() {
                 // Permissions denied
                 Toast.makeText(
                     this@Profile,
-                    "Location permissions are required to update your location",
+                    "Разрешенията за достъп до локация са необходими за да се намери сегашната",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -321,7 +321,7 @@ class Profile : AppCompatActivity() {
                 // Show explanation to user about why location is needed
                 Toast.makeText(
                     this,
-                    "Location permission is needed to show your current city/country",
+                    "Разрешенията за достъп до локация са необходими за да се намери сегашната",
                     Toast.LENGTH_LONG
                 ).show()
                 locationPermissionRequest.launch(
@@ -346,7 +346,7 @@ class Profile : AppCompatActivity() {
     private suspend fun updateLocationDisplay() {
         // Show a loading indicator
         withContext(Dispatchers.Main) {
-            locationTextView.text = "Fetching location..."
+            locationTextView.text = "Търсиене на местоположение..."
             updateLocationButton.isEnabled = false
         }
 
@@ -363,7 +363,7 @@ class Profile : AppCompatActivity() {
                     updateUserLocation(locationResult.locationName)
                     Toast.makeText(
                         this@Profile,
-                        "Location updated successfully!",
+                            "Местоположението е актуализирано успешно!",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

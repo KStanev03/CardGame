@@ -28,7 +28,11 @@ class GameHistoryAdapter(private var history: List<GameHistory>) :
         val historyItem = history[position]
 
         // Set outcome text with appropriate color
-        holder.outcomeText.text = historyItem.outcome.capitalize()
+        holder.outcomeText.text = when (historyItem.outcome.lowercase()) {
+            "win" -> "Победа"
+            "loss" -> "Загуба"
+            else -> historyItem.outcome.capitalize()
+        }
         holder.outcomeText.setTextColor(
             if (historyItem.outcome.equals("win", ignoreCase = true)) {
                 holder.itemView.context.getColor(R.color.win_color)
@@ -38,8 +42,8 @@ class GameHistoryAdapter(private var history: List<GameHistory>) :
         )
 
         // Set other details
-        holder.opponentText.text = historyItem.opponent ?: "Unknown Opponent"
-        holder.scoreText.text = historyItem.score ?: "Score not recorded"
+        holder.opponentText.text = historyItem.opponent ?: "Неизвестен противник"
+        holder.scoreText.text = historyItem.score ?: "Резултатът не е записан"
 
         // Format and set date
         holder.dateText.text = formatDate(historyItem.timestamp)

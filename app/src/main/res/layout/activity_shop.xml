@@ -9,7 +9,7 @@
         android:id="@+id/shopTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Card Deck Shop"
+        android:text="Магазин за тестета"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="Назад"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopTitle" />
 
@@ -36,7 +36,7 @@
         android:id="@+id/myDecksButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Decks"
+        android:text="Моите тестета"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvShopCoins" />
 

@@ -30,40 +30,40 @@ class AchievementAdapter(
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         val achievement = achievements[position]
 
-        // Set achievement title
+        // Задаване на заглавие на постижението
         holder.titleTextView.text = achievement.goalName
 
-        // Set achievement description based on type
+        // Задаване на описание на постижението според типа
         val description = when {
-            achievement.goalName.contains("Win") ||
-                    achievement.goalName.contains("Champion") ||
-                    achievement.goalName.contains("Master") ||
-                    achievement.goalName.contains("Player") ->
-                "Win ${achievement.targetValue} games"
+            achievement.goalName.contains("Новак") ||
+                    achievement.goalName.contains("Опитен Играч") ||
+                    achievement.goalName.contains("Пастра Майстор") ||
+                    achievement.goalName.contains("Пастра Шампион") ->
+                "Спечелете ${achievement.targetValue} игри"
 
-            achievement.goalName.contains("Point") ->
-                "Accumulate ${achievement.targetValue} points"
+            achievement.goalName.contains("Точки") ->
+                "Съберете ${achievement.targetValue} точки"
 
-            achievement.goalName.contains("Enthusiast") ||
-                    achievement.goalName.contains("Addict") ||
-                    achievement.goalName.contains("Veteran") ->
-                "Play ${achievement.targetValue} games"
+            achievement.goalName.contains("Ентусиаст") ||
+                    achievement.goalName.contains("Зависим") ||
+                    achievement.goalName.contains("Ветеран") ->
+                "Изиграйте ${achievement.targetValue} игри"
 
             else -> ""
         }
         holder.descriptionTextView.text = description
 
-        // Set progress
+        // Задаване на прогрес
         val progress = (achievement.currentValue * 100) / achievement.targetValue
         holder.progressBar.progress = progress.coerceAtMost(100)
 
-        // Set progress text
+        // Задаване на текст за прогрес
         holder.progressTextView.text = "${achievement.currentValue}/${achievement.targetValue}"
 
-        // If completed, set progress bar to completed state
+        // Ако е завършено, задаване на прогрес бара в завършено състояние
         if (isCompleted) {
             holder.progressBar.progress = 100
-            holder.progressTextView.text = "Completed!"
+            holder.progressTextView.text = "Завършено!"
         }
     }
 

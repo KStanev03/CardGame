@@ -27,9 +27,10 @@ class Team(val id: Int, val name: String) {
 
 
     fun addBonusPoints(points: Int) {
-        println("Team ${id} adding bonus points: $points. Previous bonus: $bonusPoints")
+        println("Отбор $id добавя бонус точки: $points. Предишен бонус: $bonusPoints")
         bonusPoints += points
-        println("Team ${id} new bonus points: $bonusPoints")
+        println("Отбор $id нови бонус точки: $bonusPoints")
     }
+
 
 }

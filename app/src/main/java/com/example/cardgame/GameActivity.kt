@@ -109,7 +109,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // Set up new game button (previously next button)
-        newGameButton.text = "New Game"
+        newGameButton.text = "Нова игра"
         newGameButton.visibility = View.GONE
         newGameButton.setOnClickListener {
             setupGame()
@@ -124,10 +124,10 @@ class GameActivity : AppCompatActivity() {
 
 
         // Add players (0 is human, others are AI)
-        game.addPlayer("You", 0, true)
-        game.addPlayer("AI Player 2", 1)
-        game.addPlayer("AI Partner", 0)
-        game.addPlayer("AI Player 4", 1)
+        game.addPlayer("Твой", 0, true)
+        game.addPlayer("Играч 2", 1)
+        game.addPlayer("Партньор", 0)
+        game.addPlayer("Играч 4", 1)
 
         // Deal initial cards
         game.dealCards()
@@ -147,12 +147,12 @@ class GameActivity : AppCompatActivity() {
         val isHumanTurn = currentPlayer.isHuman
 
         // Update status
-        statusTextView.text = "Current player: ${currentPlayer.name}"
+        statusTextView.text = "Ред на: ${currentPlayer.name}"
 
         // Update scores
         val scores = game.getTeamScores()
-        team1ScoreTextView.text = "Team 1: ${scores[0]} points"
-        team2ScoreTextView.text = "Team 2: ${scores[1]} points"
+        team1ScoreTextView.text = "Отбор 1: ${scores[0]} точки"
+        team2ScoreTextView.text = "Отбот 2: ${scores[1]} точки"
 
         // Update table cards
         val tableCards = game.getTableCards()
@@ -287,7 +287,7 @@ class GameActivity : AppCompatActivity() {
                     if (result.isPastra) {
                         // Show Pastra animation and play sound
                         showPastraAnimation()
-                        Toast.makeText(this, "PASTRA! ${result.pastraPoints} points!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "ПАСТРА! ${result.pastraPoints} точки", Toast.LENGTH_SHORT).show()
                         handler.postDelayed({
                             updateUI()
 
@@ -341,7 +341,7 @@ class GameActivity : AppCompatActivity() {
 
         if (!currentPlayer.isHuman) {
             // Show thinking animation
-            statusTextView.text = "${currentPlayer.name} is thinking..."
+            statusTextView.text = "${currentPlayer.name} мисли..."
 
             // Delay to make it feel more natural
             handler.postDelayed({
@@ -372,7 +372,7 @@ class GameActivity : AppCompatActivity() {
                             if (result.isPastra) {
                                 // Show Pastra animation
                                 showPastraAnimation()
-                                Toast.makeText(this, "${currentPlayer.name} got a PASTRA!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "${currentPlayer.name} направи Пастра!", Toast.LENGTH_SHORT).show()
                                 handler.postDelayed({
                                     updateUI()
                                     isAnimating = false
@@ -415,19 +415,19 @@ class GameActivity : AppCompatActivity() {
 
         // Update scores one last time
         val scores = game.getTeamScores()
-        team1ScoreTextView.text = "Team 1: ${scores[0]} points"
-        team2ScoreTextView.text = "Team 2: ${scores[1]} points"
+        team1ScoreTextView.text = "Отбор 1: ${scores[0]} точки"
+        team2ScoreTextView.text = "Отбор 2: ${scores[1]} точки"
 
         // Determine winner
         val winningTeam = game.getWinningTeam()
         val message = if (winningTeam != null) {
-            "${winningTeam.name} wins with ${scores[winningTeam.id]} points!"
+            "${winningTeam.name} печели с ${scores[winningTeam.id]} точки!"
         } else {
-            "It's a tie!"
+            "Равно е"
         }
 
         // Show game over dialog
-        Toast.makeText(this, "Game Over! $message", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Край на играта! $message", Toast.LENGTH_LONG).show()
 
         // Get the logged-in user ID - use LoggedUser if userId from intent is invalid
         val userId = intent.getIntExtra("USER_ID", -1).takeIf { it != -1 } ?: LoggedUser.getUserId()
@@ -489,17 +489,17 @@ class GameActivity : AppCompatActivity() {
     private suspend fun loadActiveDeckPrefix() {
         if (currentUserId != -1) {
             try {
-                // Get active deck prefix - using suspend function directly
+                // Зареждане на префикс за активното тесте
                 activeResourcePrefix = deckManager.getActiveResourcePrefix(currentUserId)
-                // Log the loaded prefix for debugging
-                println("Loaded active resource prefix: $activeResourcePrefix")
+                // Отпечатване на заредения префикс за дебъг
+                println("Зареден префикс за активно тесте: $activeResourcePrefix")
             } catch (e: Exception) {
-                // Fallback to default prefix
-                println("Error loading active deck: ${e.message}")
+                // При грешка – използване на префикс по подразбиране
+                println("Грешка при зареждане на тестето: ${e.message}")
                 activeResourcePrefix = "card_"
             }
         } else {
-            // Default for dev/testing
+            // По подразбиране за разработка/тестване
             activeResourcePrefix = "card_"
         }
     }
