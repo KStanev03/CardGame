@@ -124,7 +124,7 @@ class GameActivity : AppCompatActivity() {
 
 
         // Add players (0 is human, others are AI)
-        game.addPlayer("Твой", 0, true)
+        game.addPlayer("Играч 1", 0, true)
         game.addPlayer("Играч 2", 1)
         game.addPlayer("Партньор", 0)
         game.addPlayer("Играч 4", 1)

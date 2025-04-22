@@ -3,7 +3,7 @@ package com.example.cardgame.domain.model
 import com.example.cardgame.R
 
 data class Card(val rank: Rank, val suit: Suit) {
-    override fun toString(): String = "$rank of $suit"
+    override fun toString(): String = "$rank $suit"
 
     fun getPoints(): Int {
         return when (rank) {

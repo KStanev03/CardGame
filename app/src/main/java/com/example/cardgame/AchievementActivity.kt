@@ -39,14 +39,19 @@ class AchievementActivity : AppCompatActivity() {
         noCompletedText = findViewById(R.id.noCompletedAchievementsText)
         noInProgressText = findViewById(R.id.noInProgressAchievementsText)
 
-        // Set up RecyclerViews
+        // Set up RecyclerViews with fixed height to avoid layout issues
         completedRecyclerView.layoutManager = LinearLayoutManager(this)
         inProgressRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Set fixed height for RecyclerViews to ensure they're visible
+        val params = completedRecyclerView.layoutParams
+        params.height = 400 // Set a reasonable fixed height in pixels
+        completedRecyclerView.layoutParams = params
 
         // Initialize achievement manager
         achievementManager = AchievementManager(this)
 
-        // Load achievements
+        // Load achievements immediately
         loadAchievements()
     }
 
@@ -61,13 +66,22 @@ class AchievementActivity : AppCompatActivity() {
                 println("Debug: Completed achievement: ${it.goalName}, isCompleted=${it.isCompleted}")
             }
 
+            // Important: Update UI visibility BEFORE setting adapter
             if (completedAchievements.isEmpty()) {
                 noCompletedText.visibility = View.VISIBLE
                 completedRecyclerView.visibility = View.GONE
             } else {
                 noCompletedText.visibility = View.GONE
                 completedRecyclerView.visibility = View.VISIBLE
-                completedRecyclerView.adapter = AchievementAdapter(completedAchievements, true)
+
+                // Create and set adapter
+                val adapter = AchievementAdapter(completedAchievements, true)
+                completedRecyclerView.adapter = adapter
+
+                // Force layout refresh
+                completedRecyclerView.post {
+                    adapter.notifyDataSetChanged()
+                }
             }
 
             // Get in-progress achievements
@@ -76,13 +90,22 @@ class AchievementActivity : AppCompatActivity() {
             // Log for debugging
             println("Debug: Found ${inProgressAchievements.size} in-progress achievements")
 
+            // Important: Update UI visibility BEFORE setting adapter
             if (inProgressAchievements.isEmpty()) {
                 noInProgressText.visibility = View.VISIBLE
                 inProgressRecyclerView.visibility = View.GONE
             } else {
                 noInProgressText.visibility = View.GONE
                 inProgressRecyclerView.visibility = View.VISIBLE
-                inProgressRecyclerView.adapter = AchievementAdapter(inProgressAchievements, false)
+
+                // Create and set adapter
+                val adapter = AchievementAdapter(inProgressAchievements, false)
+                inProgressRecyclerView.adapter = adapter
+
+                // Force layout refresh
+                inProgressRecyclerView.post {
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
     }
