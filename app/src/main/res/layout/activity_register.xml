@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_login"
+    android:background="@drawable/background_board_log"
     tools:context=".login.Register"
     tools:layout_editor_absoluteX="100dp"
     tools:layout_editor_absoluteY="-8dp">

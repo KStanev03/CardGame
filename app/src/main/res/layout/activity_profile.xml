@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_700"
+    android:background="#35654d"
     tools:context=".Profile">
 
     <TextView
@@ -351,7 +351,7 @@
                             android:layout_width="0dp"
                             android:layout_height="70dp"
                             android:layout_weight="1"
-                            android:backgroundTint="@color/purple_700"
+                            android:backgroundTint="#35654d"
                             android:layout_marginEnd="5dp"
                             android:text="Актуализиране"
                             android:textStyle="bold"
